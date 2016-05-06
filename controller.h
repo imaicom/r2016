@@ -1,0 +1,37 @@
+// Buttons constant
+#define PAD_KEY_SELECT 0
+#define PAD_KEY_L_JOYSTICK 1
+#define PAD_KEY_R_JOYSTICK 2
+#define PAD_KEY_START 3
+#define PAD_KEY_UP 4
+#define PAD_KEY_RIGHT 5
+#define PAD_KEY_DOWN 6
+#define PAD_KEY_LEFT 7
+#define PAD_KEY_L2 8
+#define PAD_KEY_R2 9
+#define PAD_KEY_L1 10
+#define PAD_KEY_R1 11
+#define PAD_KEY_TRIANGLE 12
+#define PAD_KEY_CIRCLE 13
+#define PAD_KEY_CROSS 14
+#define PAD_KEY_SQUARE 15
+#define PAD_KEY_PS 16
+
+
+// Sticks constant
+#define PAD_LEFT_X 0
+#define PAD_LEFT_Y 1
+#define PAD_RIGHT_X 2
+#define PAD_RIGHT_Y 3
+#define PAD_UP 8
+#define PAD_RIGHT 9
+#define PAD_LEFT ()
+#define PAD_DOWN 10
+#define PAD_L2 12
+#define PAD_R2 13
+#define PAD_L1 14
+#define PAD_R1 15
+#define PAD_TRIANGLE 16
+#define PAD_CIRCLE 17
+#define PAD_CROSS 18
+#define PAD_SQUARE 19

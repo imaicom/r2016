@@ -8,13 +8,19 @@ int main(int argc , char *argv[]) {
 	wiringPiSetup();
 	printf("Raspberry SOFT PWM OUTPUT\n");
 
-	softPWmCreate(20,0,100); // GP20 start-0 10ms
-//	softPWmCreate(21,0,100); // GP21 start-0 10ms
+	pinMode(23,OUTPUT);
+//	pinMode(25,OUTPUT);
+	digitalWrite(23,0);
+//	digitalWrite(25,1);
 
-	softPwmWrite(20,30); // GP20 3ms
-//	softPwmWrite(21,30); // GP21 3ms
+//	softPwmCreate(23,0,100); // GP20 start-0 10ms
+	softPwmCreate(25,0,100); // GP21 start-0 10ms
 
-	while(1);
+//	softPwmWrite(23,30); // GP20 3ms
+	softPwmWrite(25,0); // GP21 3ms
+
+
+	while (getchar() == EOF) ;
 
 	return 0;
 }	
