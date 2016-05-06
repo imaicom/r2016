@@ -1,3 +1,4 @@
+// cc -o softPwm softPwm.c -lwiringPi -lm
 #include <stdio.h>
 #include <wiringPi.h>
 #include <softPwm.h>
