@@ -3,8 +3,8 @@
 #include <wiringPi.h>
 #include <softPwm.h>
 
-int main(int argc,char *argv[]) {
-	int fnum = 0;
+int main(int argc , char *argv[]) {
+
 	wiringPiSetup();
 	printf("Raspberry SOFT PWM OUTPUT\n");
 
