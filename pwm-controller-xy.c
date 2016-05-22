@@ -48,23 +48,35 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	y = xx * sin(-M_PI/4) + yy * cos(-M_PI/4);
 
 	if(abs(x) < 5) {
+		softPwmWrite(1,0);
+		softPwmWrite(4,0);
 		softPwmWrite(26,0);
 		softPwmWrite(27,0);
 	} else if(x > 0) {
+		softPwmWrite(1,abs(y));
+		softPwmWrite(4,0);
 		softPwmWrite(26,abs(y));
 		softPwmWrite(27,0);
 	} else {
+		softPwmWrite(1,0);
+		softPwmWrite(4,abs(y));
 		softPwmWrite(26,0);
 		softPwmWrite(27,abs(y));
 	};
 
 	if(abs(y) < 5) {
+		softPwmWrite(5,0);
+		softPwmWrite(6,0);
 		softPwmWrite(28,0);
 		softPwmWrite(29,0);
 	} else if(y > 0) {
+		softPwmWrite(5,abs(y));
+		softPwmWrite(6,0);
 		softPwmWrite(28,abs(y));
 		softPwmWrite(29,0);
 	} else {
+		softPwmWrite(5,0);
+		softPwmWrite(6,abs(y));
 		softPwmWrite(28,0);
 		softPwmWrite(29,abs(y));
 	};
@@ -169,6 +181,10 @@ void main() {
 	struct ps3ctls ps3dat;
 
 	wiringPiSetup();
+	softPwmCreate(1,0,100); // start-0 10ms
+	softPwmCreate(4,0,100); // start-0 10ms
+	softPwmCreate(5,0,100); // start-0 10ms
+	softPwmCreate(6,0,100); // start-0 10ms
 	softPwmCreate(26,0,100); // start-0 10ms
 	softPwmCreate(27,0,100); // start-0 10ms
 	softPwmCreate(28,0,100); // start-0 10ms
