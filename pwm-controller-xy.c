@@ -53,15 +53,15 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(26,0);
 		softPwmWrite(27,0);
 	} else if(x > 0) {
-		softPwmWrite(1,abs(y));
+		softPwmWrite(1,abs(x));
 		softPwmWrite(4,0);
-		softPwmWrite(26,abs(y));
+		softPwmWrite(26,abs(x));
 		softPwmWrite(27,0);
 	} else {
 		softPwmWrite(1,0);
-		softPwmWrite(4,abs(y));
+		softPwmWrite(4,abs(x));
 		softPwmWrite(26,0);
-		softPwmWrite(27,abs(y));
+		softPwmWrite(27,abs(x));
 	};
 
 	if(abs(y) < 5) {
