@@ -39,7 +39,8 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	printf(" 6=%4d ",ps3dat->stick [PAD_LEFT_Y]);
 	printf(" 7=%4d ",ps3dat->stick [PAD_RIGHT_X]);
 	printf(" 8=%4d ",ps3dat->stick [PAD_RIGHT_Y]);
-	printf("\n");
+	printf("\n"); 
+	
 
 	y = ps3dat->stick [PAD_LEFT_Y];
 	if(abs(y) < 15) {
