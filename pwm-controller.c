@@ -31,7 +31,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 
 //	printf("%d %d\n",nr_btn,nr_stk);
 
-	printf(" 1=%2d ",ps3dat->button[PAD_KEY_LEFT]);
+  	printf(" 1=%2d ",ps3dat->button[PAD_KEY_LEFT]);
 	printf(" 2=%2d ",ps3dat->button[PAD_KEY_RIGHT]);
 	printf(" 3=%2d ",ps3dat->button[PAD_KEY_UP]);
 	printf(" 4=%2d ",ps3dat->button[PAD_KEY_DOWN]);
