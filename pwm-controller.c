@@ -42,12 +42,15 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	printf("\n");
 
 	y = ps3dat->stick [PAD_LEFT_Y];
-	if(y < 0) {
+	if(abs(y) < 15) {
+		softPwmWrite(23,0);		// GP13
+		softPwmWrite(25,0);		// GP26
+	} else if(y > 0) {
 		softPwmWrite(23,abs(y));	// GP13
 		softPwmWrite(25,0);		// GP26
 	} else {
 		softPwmWrite(23,0);		// GP13
-		softPwmWrite(25,y);		// GP26
+		softPwmWrite(25,abs(y));	// GP26
 	};
 	
 	if(ps3dat->button[PAD_KEY_CROSS]==1) return -1; // end of program
