@@ -1,4 +1,4 @@
-// cc -o pwm-controller-xy pwm-controller-xy.c -lwiringPi
+// cc -o pwm-controller-xy pwm-controller-xy.c -lwiringPi -lm
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
