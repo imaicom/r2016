@@ -22,6 +22,39 @@ struct ps3ctls {
 	short *stick;			// stick[nr_sticks]
 };
 
+int fds;
+int s0 = 0;
+int s1 = 0;
+
+int resetPCA9685(int fd) {
+	wiringPiI2CWriteReg8(fd,0,0);
+}
+
+int setPCA9685Freq(int fd , float freq) {
+	float prescaleval;
+	int prescale , oldmode , newmode;
+	freq = 0.9 * freq;
+	prescaleval = 25000000.0;
+	prescaleval /= 4096.0;
+	prescaleval /= freq;
+	prescaleval -= 1.0;
+	prescale = prescaleval + 0.5;
+	oldmode = wiringPiI2CReadReg8(fd,0x00);
+	newmode = (oldmode & 0x7F)|0x10;
+	wiringPiI2CWriteReg8(fd , 0x00 , newmode);
+	wiringPiI2CWriteReg8(fd , 0xFE , prescale);
+	wiringPiI2CWriteReg8(fd , 0x00 , oldmode);
+	sleep(0.005);
+	wiringPiI2CWriteReg8(fd , 0x00 , oldmode | 0xA1);
+}
+
+
+int setPCA9685Duty(int fd , int channel , int on , int off) {
+	int channelpos;
+	channelpos = 0x6 + 4 * channel;
+	wiringPiI2CWriteReg16(fd , channelpos   , on  & 0x0FFF);
+	wiringPiI2CWriteReg16(fd , channelpos+2 , off & 0x0FFF);
+}
 
 int ps3c_test(struct ps3ctls *ps3dat) {
 
@@ -29,6 +62,9 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	unsigned char nr_btn = ps3dat->nr_buttons;
 	unsigned char nr_stk = ps3dat->nr_sticks;
 	int xx,yy,x,y,z;
+
+	setPCA9685Duty(fds , 0 , 0 , 276 + s0);
+	setPCA9685Duty(fds , 1 , 0 , 276 + s1);
 	
 //	printf("%d %d\n",nr_btn,nr_stk);
 
@@ -40,6 +76,14 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	printf(" 6=%4d ",ps3dat->stick [PAD_LEFT_Y]);
 	printf(" 7=%4d ",ps3dat->stick [PAD_RIGHT_X]);
 	printf(" 8=%4d ",ps3dat->stick [PAD_RIGHT_Y]);
+	
+	if (ps3dat->button[PAD_KEY_LEFT])	{ s0++; if(s0 > +100) s0 = +100; };
+	if (ps3dat->button[PAD_KEY_RIGHT])	{ s0--; if(s0 < -100) s0 = -100; };
+	if (ps3dat->button[PAD_KEY_UP]) 	{ s1++; if(s1 > +100) s1 = +100; };
+	if (ps3dat->button[PAD_KEY_DOWN])	{ s1--; if(s1 < -100) s1 = -100; };
+
+	printf(" s0=%4d ",s0);
+	printf(" s1=%4d ",s1);
 	printf("\n"); 
 
 	xx = ps3dat->stick [PAD_LEFT_X];
@@ -203,6 +247,10 @@ void main() {
 	softPwmCreate(23,0,20); // start-0 10ms
 	softPwmCreate(24,0,20); // start-0 10ms
 	softPwmCreate(25,0,20); // start-0 10ms
+	
+	fds = wiringPiI2CSetup(0x40);	// PCA9685
+	resetPCA9685(fds);
+	setPCA9685Freq(fds,50);
 
 	while(1) {
 		if(!(ps3c_init(&ps3dat, df))) {
