@@ -63,8 +63,8 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	unsigned char nr_stk = ps3dat->nr_sticks;
 	int xx,yy,x,y,z;
 
-	setPCA9685Duty(fds , 0 , 0 , 276 + s0);
-	setPCA9685Duty(fds , 1 , 0 , 276 + s1);
+	setPCA9685Duty(fds , 0 , 0 , 276 + s0 / 2);
+	setPCA9685Duty(fds , 1 , 0 , 276 + s1 / 2);
 	
 //	printf("%d %d\n",nr_btn,nr_stk);
 
@@ -77,10 +77,10 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	printf(" 7=%4d ",ps3dat->stick [PAD_RIGHT_X]);
 	printf(" 8=%4d ",ps3dat->stick [PAD_RIGHT_Y]);
 	
-	if (ps3dat->button[PAD_KEY_LEFT])	{ s0++; if(s0 > +100) s0 = +100; };
-	if (ps3dat->button[PAD_KEY_RIGHT])	{ s0--; if(s0 < -100) s0 = -100; };
-	if (ps3dat->button[PAD_KEY_UP]) 	{ s1++; if(s1 > +100) s1 = +100; };
-	if (ps3dat->button[PAD_KEY_DOWN])	{ s1--; if(s1 < -100) s1 = -100; };
+	if (ps3dat->button[PAD_KEY_LEFT])	{ s0++; if(s0 > +200) s0 = +200; };
+	if (ps3dat->button[PAD_KEY_RIGHT])	{ s0--; if(s0 < -200) s0 = -200; };
+	if (ps3dat->button[PAD_KEY_UP]) 	{ s1++; if(s1 > +200) s1 = +200; };
+	if (ps3dat->button[PAD_KEY_DOWN])	{ s1--; if(s1 < -200) s1 = -200; };
 
 	printf(" s0=%4d ",s0);
 	printf(" s1=%4d ",s1);
