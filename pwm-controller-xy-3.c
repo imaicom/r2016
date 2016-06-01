@@ -248,6 +248,9 @@ void main() {
 	softPwmCreate(24,0,20); // start-0 10ms
 	softPwmCreate(25,0,20); // start-0 10ms
 	
+	pinMode(15,OUTPUT);
+	digitalWrite(15,0);
+	
 	fds = wiringPiI2CSetup(0x40);	// PCA9685
 	resetPCA9685(fds);
 	setPCA9685Freq(fds,50);
