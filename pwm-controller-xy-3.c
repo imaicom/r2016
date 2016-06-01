@@ -65,7 +65,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 
 	setPCA9685Duty(fds , 0 , 0 , 276 + s0 / 2);
 	setPCA9685Duty(fds , 1 , 0 , 276 + s1 / 2);
-	
+
 //	printf("%d %d\n",nr_btn,nr_stk);
 
   	printf(" 1=%2d ",ps3dat->button[PAD_KEY_LEFT]);
