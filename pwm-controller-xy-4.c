@@ -22,9 +22,12 @@ struct ps3ctls {
 	short *stick;			// stick[nr_sticks]
 };
 
+// global
 int fds;
 int s0 = 0;
 int s1 = 0;
+unsigned int timWheel;
+int cntWheel = 0;
 
 int resetPCA9685(int fd) {
 	wiringPiI2CWriteReg8(fd,0,0);
@@ -81,6 +84,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	printf(" b=%4d ",digitalRead(14));
 	printf(" c=%4d ",digitalRead(15));
 	printf(" d=%4d ",digitalRead( 3));
+	printf(" e=%4d ",cntWheel);
 
 	if (ps3dat->button[PAD_KEY_TRIANGLE]) {
 		digitalWrite(7,1);
@@ -133,6 +137,11 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(28,abs(m2));
 		softPwmWrite(29,0);
 	};
+	
+	if (timWheel != digitalRead(12)) {
+		timWheel = digitalRead(12);
+		cntWheel++;
+	};
 
 	if(ps3dat->button[PAD_KEY_CROSS]==1) return -1; // end of program
 	return 0;
@@ -149,6 +158,12 @@ int ps3c_input(struct ps3ctls *ps3dat) {
 		if (rp != sizeof(struct js_event)) {
 			return -1;
 		}
+
+		if (timWheel != digitalRead(12)) {
+			timWheel = digitalRead(12);
+			cntWheel++;
+		};
+
 	} while (ev.type & JS_EVENT_INIT);
 
 	switch (ev.type) {
@@ -216,6 +231,7 @@ int ps3c_init(struct ps3ctls *ps3dat, const char *df) {
 //	ps3dat->stick [PAD_LEFT_Y]=0;
 //	ps3dat->stick [PAD_RIGHT_X]=0;
 //	ps3dat->stick [PAD_RIGHT_Y]=0;
+	timWheel = digitalRead(12);
 
 	return 0;
 }
@@ -258,6 +274,10 @@ void main() {
 			do {
 				if (ps3c_test(&ps3dat) < 0) break;
 //				if(!(digitalRead( 3))) {system("sudo shutdown -h now &");};
+				if(digitalRead( 3)) {
+					digitalWrite(4,1);
+					break;
+				};
 			} while (!(ps3c_input(&ps3dat)));
 		
 			ps3c_exit(&ps3dat);		
