@@ -76,6 +76,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	printf(" 6=%4d ",ps3dat->stick [PAD_LEFT_Y]);
 	printf(" 7=%4d ",ps3dat->stick [PAD_RIGHT_X]);
 	printf(" 8=%4d ",ps3dat->stick [PAD_RIGHT_Y]);
+	printf(" 9=%4d ",digitalRead(12));
 	
 	if (ps3dat->button[PAD_KEY_LEFT])	{ s0++; if(s0 > +200) s0 = +200; };
 	if (ps3dat->button[PAD_KEY_RIGHT])	{ s0--; if(s0 < -200) s0 = -200; };
@@ -216,6 +217,11 @@ void main() {
 	softPwmCreate(28,0,20); // start-0 10ms
 	softPwmCreate(29,0,20); // start-0 10ms
 	softPwmCreate(25,0,20); // start-0 10ms
+
+	pinMode(12,INPUT);pullUpDnControl(12,PUD_UP);
+	pinMode(13,INPUT);pullUpDnControl(13,PUD_UP);
+	pinMode(14,INPUT);pullUpDnControl(14,PUD_UP);
+	pinMode(15,INPUT);pullUpDnControl(15,PUD_UP);
 	
 	pinMode(4,OUTPUT);
 	digitalWrite(4,0);
