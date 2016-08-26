@@ -80,6 +80,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	printf(" a=%4d ",digitalRead(13));
 	printf(" b=%4d ",digitalRead(14));
 	printf(" c=%4d ",digitalRead(15));
+	printf(" d=%4d ",digitalRead( 3));
 
 	if (ps3dat->button[PAD_KEY_TRIANGLE]) {
 		digitalWrite(7,1);
@@ -88,6 +89,12 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	};
 
 	if (ps3dat->button[PAD_KEY_CIRCLE]) {
+		softPwmWrite(25,50);
+	} else {
+		softPwmWrite(25,0);
+	};
+	
+	if(digitalRead(13)+digitalRead(14)>0) {
 		softPwmWrite(25,50);
 	} else {
 		softPwmWrite(25,0);
@@ -128,7 +135,6 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	};
 
 	if(ps3dat->button[PAD_KEY_CROSS]==1) return -1; // end of program
-
 	return 0;
 }
 
@@ -233,6 +239,7 @@ void main() {
 	softPwmCreate(29,0,20); // start-0 10ms
 	softPwmCreate(25,0,20); // start-0 10ms
 
+	pinMode( 3,INPUT);pullUpDnControl( 3,PUD_UP);
 	pinMode(12,INPUT);pullUpDnControl(12,PUD_UP);
 	pinMode(13,INPUT);pullUpDnControl(13,PUD_UP);
 	pinMode(14,INPUT);pullUpDnControl(14,PUD_UP);
@@ -245,15 +252,16 @@ void main() {
 	resetPCA9685(fds);
 	setPCA9685Freq(fds,50);
 
-	while(1) {
+//	while(1) {
 		if(!(ps3c_init(&ps3dat, df))) {
 
 			do {
 				if (ps3c_test(&ps3dat) < 0) break;
+//				if(!(digitalRead( 3))) {system("sudo shutdown -h now &");};
 			} while (!(ps3c_input(&ps3dat)));
 		
 			ps3c_exit(&ps3dat);		
 		};
-	};
+//	};
 }
 
