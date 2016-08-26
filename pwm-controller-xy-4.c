@@ -77,14 +77,29 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	printf(" 7=%4d ",ps3dat->stick [PAD_RIGHT_X]);
 	printf(" 8=%4d ",ps3dat->stick [PAD_RIGHT_Y]);
 	printf(" 9=%4d ",digitalRead(12));
-	
-	if (ps3dat->button[PAD_KEY_LEFT])	{ s0++; if(s0 > +200) s0 = +200; };
-	if (ps3dat->button[PAD_KEY_RIGHT])	{ s0--; if(s0 < -200) s0 = -200; };
-	if (ps3dat->button[PAD_KEY_UP]) 	{ s1++; if(s1 > +200) s1 = +200; };
-	if (ps3dat->button[PAD_KEY_DOWN])	{ s1--; if(s1 < -200) s1 = -200; };
+	printf(" a=%4d ",digitalRead(13));
+	printf(" b=%4d ",digitalRead(14));
+	printf(" c=%4d ",digitalRead(15));
 
-	printf(" s0=%4d ",s0);
-	printf(" s1=%4d ",s1);
+	if (ps3dat->button[PAD_KEY_TRIANGLE]) {
+		digitalWrite(7,1);
+	} else {
+		digitalWrite(7,0);
+	};
+
+	if (ps3dat->button[PAD_KEY_CIRCLE]) {
+		softPwmWrite(25,50);
+	} else {
+		softPwmWrite(25,0);
+	};
+
+//	if (ps3dat->button[PAD_KEY_LEFT])	{ s0++; if(s0 > +200) s0 = +200; };
+//	if (ps3dat->button[PAD_KEY_RIGHT])	{ s0--; if(s0 < -200) s0 = -200; };
+//	if (ps3dat->button[PAD_KEY_UP]) 	{ s1++; if(s1 > +200) s1 = +200; };
+//	if (ps3dat->button[PAD_KEY_DOWN])	{ s1--; if(s1 < -200) s1 = -200; };
+
+//	printf(" s0=%4d ",s0);
+//	printf(" s1=%4d ",s1);
 	printf("\n"); 
 
 	m1 = ps3dat->stick [PAD_LEFT_Y ];
@@ -223,8 +238,8 @@ void main() {
 	pinMode(14,INPUT);pullUpDnControl(14,PUD_UP);
 	pinMode(15,INPUT);pullUpDnControl(15,PUD_UP);
 	
-	pinMode(4,OUTPUT);
-	digitalWrite(4,0);
+	pinMode(4,OUTPUT);digitalWrite(4,0);
+	pinMode(7,OUTPUT);digitalWrite(7,0);
 	
 	fds = wiringPiI2CSetup(0x40);	// PCA9685
 	resetPCA9685(fds);
