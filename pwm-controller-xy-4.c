@@ -93,22 +93,22 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(16,0);
 		softPwmWrite( 1,0);
 	} else if(m1 > 0) {
-		softPwmWrite(16,abs(m1));
-		softPwmWrite( 1,0);
-	} else {
 		softPwmWrite(16,0);
 		softPwmWrite( 1,abs(m1));
+	} else {
+		softPwmWrite(16,abs(m1));
+		softPwmWrite( 1,0);
 	};
 
 	if(abs(m2) < 5) {
 		softPwmWrite(28,0);
 		softPwmWrite(29,0);
 	} else if(m2 > 0) {
-		softPwmWrite(28,abs(m2));
-		softPwmWrite(29,0);
-	} else {
 		softPwmWrite(28,0);
 		softPwmWrite(29,abs(m2));
+	} else {
+		softPwmWrite(28,abs(m2));
+		softPwmWrite(29,0);
 	};
 
 	if(ps3dat->button[PAD_KEY_CROSS]==1) return -1; // end of program
