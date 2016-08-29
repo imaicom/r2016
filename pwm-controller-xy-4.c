@@ -85,6 +85,8 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	printf(" c=%4d ",digitalRead(15));
 	printf(" d=%4d ",digitalRead( 3));
 	printf(" e=%4d ",cntWheel);
+	printf(" f=%4d ",digitalRead( 5));
+	printf(" g=%4d ",digitalRead( 6));
 
 	if (ps3dat->button[PAD_KEY_TRIANGLE]) {
 		digitalWrite(7,1);
@@ -260,6 +262,8 @@ void main() {
 	pinMode(13,INPUT);pullUpDnControl(13,PUD_UP);
 	pinMode(14,INPUT);pullUpDnControl(14,PUD_UP);
 	pinMode(15,INPUT);pullUpDnControl(15,PUD_UP);
+	pinMode( 5,INPUT);pullUpDnControl( 5,PUD_UP);
+	pinMode( 6,INPUT);pullUpDnControl( 6,PUD_UP);
 	
 	pinMode(4,OUTPUT);digitalWrite(4,0);
 	pinMode(7,OUTPUT);digitalWrite(7,0);
