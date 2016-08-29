@@ -29,34 +29,24 @@ int s1 = 0;
 unsigned int timWheel;
 int cntWheel = 0;
 
-int resetPCA9685(int fd) {
-	wiringPiI2CWriteReg8(fd,0,0);
-}
-
-int setPCA9685Freq(int fd , float freq) {
-	float prescaleval;
-	int prescale , oldmode , newmode;
-	freq = 0.9 * freq;
-	prescaleval = 25000000.0;
-	prescaleval /= 4096.0;
-	prescaleval /= freq;
-	prescaleval -= 1.0;
-	prescale = prescaleval + 0.5;
-	oldmode = wiringPiI2CReadReg8(fd,0x00);
-	newmode = (oldmode & 0x7F)|0x10;
-	wiringPiI2CWriteReg8(fd , 0x00 , newmode);
-	wiringPiI2CWriteReg8(fd , 0xFE , prescale);
-	wiringPiI2CWriteReg8(fd , 0x00 , oldmode);
-	sleep(0.005);
-	wiringPiI2CWriteReg8(fd , 0x00 , oldmode | 0xA1);
-}
-
-
-int setPCA9685Duty(int fd , int channel , int on , int off) {
-	int channelpos;
-	channelpos = 0x6 + 4 * channel;
-	wiringPiI2CWriteReg16(fd , channelpos   , on  & 0x0FFF);
-	wiringPiI2CWriteReg16(fd , channelpos+2 , off & 0x0FFF);
+int check_port() {
+	if (timWheel != digitalRead(12)) {
+		timWheel = digitalRead(12);
+		cntWheel++;
+	};
+	if(!(digitalRead( 5))) {
+		softPwmWrite(16,0); // motor 1 off
+		softPwmWrite( 1,0);
+		softPwmWrite(28,0); // motor 2 off
+		softPwmWrite(29,0);
+		softPwmWrite(25,0); // beep off
+		system("sudo shutdown -h now &");
+	};
+	if(digitalRead(13)+digitalRead(14)>0) {
+		softPwmWrite(25,50);
+	} else {
+		softPwmWrite(25,0);
+	};
 }
 
 int ps3c_test(struct ps3ctls *ps3dat) {
@@ -65,9 +55,6 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	unsigned char nr_btn = ps3dat->nr_buttons;
 	unsigned char nr_stk = ps3dat->nr_sticks;
 	int m1,m2;
-
-	setPCA9685Duty(fds , 0 , 0 , 276 + s0 / 2);
-	setPCA9685Duty(fds , 1 , 0 , 276 + s1 / 2);
 
 //	printf("%d %d\n",nr_btn,nr_stk);
 
@@ -100,12 +87,6 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(25,0);
 	};
 	
-	if(digitalRead(13)+digitalRead(14)>0) {
-		softPwmWrite(25,50);
-	} else {
-		softPwmWrite(25,0);
-	};
-
 //	if (ps3dat->button[PAD_KEY_LEFT])	{ s0++; if(s0 > +200) s0 = +200; };
 //	if (ps3dat->button[PAD_KEY_RIGHT])	{ s0--; if(s0 < -200) s0 = -200; };
 //	if (ps3dat->button[PAD_KEY_UP]) 	{ s1++; if(s1 > +200) s1 = +200; };
@@ -140,11 +121,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(29,0);
 	};
 	
-	if (timWheel != digitalRead(12)) {
-		timWheel = digitalRead(12);
-		cntWheel++;
-	};
-
+	check_port();
 	if(ps3dat->button[PAD_KEY_CROSS]==1) return -1; // end of program
 	return 0;
 }
@@ -156,15 +133,11 @@ int ps3c_input(struct ps3ctls *ps3dat) {
 	struct js_event ev;
 
 	do {
+		check_port();
 		rp = read(ps3dat->fd, &ev, sizeof(struct js_event));
 		if (rp != sizeof(struct js_event)) {
 			return -1;
 		}
-
-		if (timWheel != digitalRead(12)) {
-			timWheel = digitalRead(12);
-			cntWheel++;
-		};
 
 	} while (ev.type & JS_EVENT_INIT);
 
@@ -268,16 +241,12 @@ void main() {
 	pinMode(4,OUTPUT);digitalWrite(4,0);
 	pinMode(7,OUTPUT);digitalWrite(7,0);
 	
-	fds = wiringPiI2CSetup(0x40);	// PCA9685
-	resetPCA9685(fds);
-	setPCA9685Freq(fds,50);
-
 //	while(1) {
 		if(!(ps3c_init(&ps3dat, df))) {
 
 			do {
+				check_port();
 				if (ps3c_test(&ps3dat) < 0) break;
-//				if(!(digitalRead( 3))) {system("sudo shutdown -h now &");};
 				if(digitalRead( 3)) {
 					digitalWrite(4,1);
 					break;
