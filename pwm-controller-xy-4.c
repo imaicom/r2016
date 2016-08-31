@@ -168,6 +168,30 @@ int ps3c_getinfo(struct ps3ctls *ps3dat) {
 	return 0;
 }
 
+int clr_LCD() {
+	system("sudo i2cset -y 1 0x50 0x00 0x01"); // Clear Display
+	system("sudo i2cset -y 1 0x50 0x00 0x38"); // Function Set 8Bit-Mode , 2Line-Mode
+	system("sudo i2cset -y 1 0x50 0x00 0x0c"); // Display On , Cursor Off , Blinking Off
+	system("sudo i2cset -y 1 0x50 0x00 0x06"); // Entry Mode Set
+}
+
+int set_posLCD(char p) {
+	int fd;
+	fd = wiringPiI2CSetup(0x50);	// ACM1602NI
+	wiringPiI2CWriteReg8(fd , 0x00 , p|0x80);
+	sleep(0.002);	
+}
+
+int put_LCD(char a) {
+	int fd;
+	fd = wiringPiI2CSetup(0x50);	// ACM1602NI
+	wiringPiI2CWriteReg8(fd , 0x80 , a);
+	sleep(0.002);	
+}
+
+void put_LCDstring(char *str) {
+	while(*str != '\0') put_LCD(*str++);
+}
 
 int ps3c_init(struct ps3ctls *ps3dat, const char *df) {
 
@@ -175,7 +199,7 @@ int ps3c_init(struct ps3ctls *ps3dat, const char *df) {
 	unsigned char nr_stk;
 	unsigned char *p;
 	int i;
-
+	
 	ps3dat->fd = open(df, O_RDONLY);
 	if (ps3dat->fd < 0) return -1;
 
@@ -208,16 +232,11 @@ int ps3c_init(struct ps3ctls *ps3dat, const char *df) {
 //	ps3dat->stick [PAD_RIGHT_Y]=0;
 	timWheel = digitalRead(12);
 	
-	system("sudo i2cset -y 1 0x50 0x00 0x01"); // Clear Display
-	system("sudo i2cset -y 1 0x50 0x00 0x38"); // Function Set 8Bit-Mode , 2Line-Mode
-	system("sudo i2cset -y 1 0x50 0x00 0x0c"); // Display On , Cursor Off , Blinking Off
-	system("sudo i2cset -y 1 0x50 0x00 0x06"); // Entry Mode Set
-	system("sudo i2cset -y 1 0x50 0x00 0x81"); // Set DDRAM Address
-	system("sudo i2cset -y 1 0x50 0x80 0x41"); // A
-	system("sudo i2cset -y 1 0x50 0x80 0x42"); // B
-	system("sudo i2cset -y 1 0x50 0x80 0x43"); // C
-	
-	system("sudo rm /tmp/*.txt"); // Clear Display
+	clr_LCD();
+	set_posLCD(0);
+	put_LCDstring("Hello!");
+	set_posLCD(0x40);
+	put_LCDstring("I'm WALL-E.");
 
 	return 0;
 }
