@@ -208,12 +208,16 @@ int ps3c_init(struct ps3ctls *ps3dat, const char *df) {
 //	ps3dat->stick [PAD_RIGHT_Y]=0;
 	timWheel = digitalRead(12);
 	
-	system("sudo i2cset -y 1 0x50 0x00 0x01");
-	system("sudo i2cset -y 1 0x50 0x00 0x38");
-	system("sudo i2cset -y 1 0x50 0x00 0x0c");
-	system("sudo i2cset -y 1 0x50 0x00 0x06");
-	system("sudo i2cset -y 1 0x50 0x80 0x41");
-	system("sudo i2cset -y 1 0x50 0x80 0x42");
+	system("sudo i2cset -y 1 0x50 0x00 0x01"); // Clear Display
+	system("sudo i2cset -y 1 0x50 0x00 0x38"); // Function Set 8Bit-Mode , 2Line-Mode
+	system("sudo i2cset -y 1 0x50 0x00 0x0c"); // Display On , Cursor Off , Blinking Off
+	system("sudo i2cset -y 1 0x50 0x00 0x06"); // Entry Mode Set
+	system("sudo i2cset -y 1 0x50 0x00 0x81"); // Set DDRAM Address
+	system("sudo i2cset -y 1 0x50 0x80 0x41"); // A
+	system("sudo i2cset -y 1 0x50 0x80 0x42"); // B
+	system("sudo i2cset -y 1 0x50 0x80 0x43"); // C
+	
+	system("sudo rm /tmp/*.txt"); // Clear Display
 
 	return 0;
 }

@@ -43,6 +43,7 @@ void main() {
 	pinMode(15,INPUT);pullUpDnControl(15,PUD_UP); // ball
 	pinMode( 5,INPUT);pullUpDnControl( 5,PUD_UP); // kill sw(red)
 	pinMode( 6,INPUT);pullUpDnControl( 6,PUD_UP); // start sw(white)
+	system("/home/pi/Pi-PWM/pwm-controller-xy-4 &");
 	
 	while(1) {
 		
@@ -64,7 +65,8 @@ void main() {
 		check_port("kill-sw"		,digitalRead(5) );
 		check_port("start-sw"		,digitalRead(6) );
 		
-		if(!(digitalRead( 5))) {system("sudo shutdown -h now &");};
+//		if(!(digitalRead( 5))) {system("sudo shutdown -h now &");};
+		
 
 	};
 }
