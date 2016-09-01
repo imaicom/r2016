@@ -317,16 +317,12 @@ void main() {
 				softPwmWrite(25,0);
 				sleep(1);
 
-				softPwmWrite(16,50);
-				softPwmWrite( 1, 0);
-				softPwmWrite(28,50);
-				softPwmWrite(29,00);
+				softPwmWrite(16,50);softPwmWrite( 1, 0);
+				softPwmWrite(28,50);softPwmWrite(29, 0);
 				sleep(1);
 			
-				softPwmWrite(16, 0);
-				softPwmWrite( 1, 0);
-				softPwmWrite(28, 0);
-				softPwmWrite(29, 0);
+				softPwmWrite(16, 0);softPwmWrite( 1, 0);
+				softPwmWrite(28, 0);softPwmWrite(29, 0);
 				sleep(1);
 			
 				set_posLCD(64);
