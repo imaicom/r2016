@@ -159,7 +159,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(29,0);
 	};
 	
-	if(ps3dat->button[PAD_KEY_CROSS]==1) return -1; // end of program
+//	if(ps3dat->button[PAD_KEY_CROSS]==1) return -1; // end of program
 	return 0;
 }
 
