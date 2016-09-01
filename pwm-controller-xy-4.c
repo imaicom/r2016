@@ -120,14 +120,6 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	printf(" g=%4d ",digitalRead( 6));
 	printf("\n"); 
 	*/
-	
-	set_posLCD(64);
-	temp = check_file("bar") - before_bar;
-	sprintf(lcd_buff , " %5d",temp);
-	put_LCDstring(lcd_buff);
-	temp = check_file("cntWheel") - before_cntWheel;
-	sprintf(lcd_buff , " %8d",temp);
-	put_LCDstring(lcd_buff);
 
 	if (ps3dat->button[PAD_KEY_TRIANGLE]) {
 		digitalWrite(7,1);
@@ -270,6 +262,7 @@ void main() {
 
 	char *df = "/dev/input/js0";
 	struct ps3ctls ps3dat;
+	long int temp;
 
 	wiringPiSetup();
 	softPwmCreate(16,0,20); // start-0 10ms
@@ -289,7 +282,7 @@ void main() {
 	pinMode(4,OUTPUT);digitalWrite(4,0);
 	pinMode(7,OUTPUT);digitalWrite(7,0);
 	
-	while(1) {
+//	while(1) {
 		if(!(ps3c_init(&ps3dat, df))) {
 
 			do {
@@ -298,10 +291,17 @@ void main() {
 					digitalWrite(4,1);
 					break;
 				};
+				set_posLCD(64);
+				temp = check_file("bar") - before_bar;
+				sprintf(lcd_buff , " %5d",temp);
+				put_LCDstring(lcd_buff);
+				temp = check_file("cntWheel") - before_cntWheel;
+				sprintf(lcd_buff , " %8d",temp);
+				put_LCDstring(lcd_buff);
 			} while (!(ps3c_input(&ps3dat)));
 		
 			ps3c_exit(&ps3dat);		
 		};
-	};
+//	};
 }
 

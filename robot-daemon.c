@@ -14,7 +14,7 @@ long int cntWheel = 0;
 unsigned int timBar;
 long int Bar = 0;
 
-int check_port(char fnp[256],int d) {
+int check_port(char fnp[256],long int d) {
 	
 	FILE *fp;
 	char fn[256]="/tmp/";
@@ -43,7 +43,7 @@ void main() {
 	pinMode(15,INPUT);pullUpDnControl(15,PUD_UP); // ball
 	pinMode( 5,INPUT);pullUpDnControl( 5,PUD_UP); // kill sw(red)
 	pinMode( 6,INPUT);pullUpDnControl( 6,PUD_UP); // start sw(white)
-	system("/home/pi/Pi-PWM/pwm-controller-xy-4 &");
+	system("sudo /home/pi/Pi-PWM/pwm-controller-xy-4 &");
 //	system("mpg123 /home/pi/Music/MacQuadra.mp3 &");
 	
 	while(1) {
