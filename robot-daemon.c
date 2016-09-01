@@ -44,6 +44,7 @@ void main() {
 	pinMode( 5,INPUT);pullUpDnControl( 5,PUD_UP); // kill sw(red)
 	pinMode( 6,INPUT);pullUpDnControl( 6,PUD_UP); // start sw(white)
 	system("/home/pi/Pi-PWM/pwm-controller-xy-4 &");
+//	system("mpg123 /home/pi/Music/MacQuadra.mp3 &");
 	
 	while(1) {
 		

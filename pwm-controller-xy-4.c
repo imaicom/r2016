@@ -1,6 +1,7 @@
 // cc -o pwm-controller-xy-4 pwm-controller-xy-4.c -lwiringPi -lm
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -28,6 +29,22 @@ int s0 = 0;
 int s1 = 0;
 unsigned int timWheel;
 int cntWheel = 0;
+
+int check_file(char fnp[256]) {
+	
+	FILE *fp;
+	char fn[256]="/tmp/";
+	long int d;
+
+	strcat(fn,fnp);
+	strcat(fn,".txt");
+	
+	if((fp=fopen(fn,"r"))!=NULL) {
+		fscanf(fp,"%8d",&d);
+		fclose(fp);
+	} else d=0;
+	return d;
+}
 
 int check_port() {
 	if (timWheel != digitalRead(12)) {
@@ -71,7 +88,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	printf(" b=%4d ",digitalRead(14));
 	printf(" c=%4d ",digitalRead(15));
 	printf(" d=%4d ",digitalRead( 3));
-	printf(" e=%4d ",cntWheel);
+	printf(" e=%4d ",check_file("cntWheel"));
 	printf(" f=%4d ",digitalRead( 5));
 	printf(" g=%4d ",digitalRead( 6));
 
@@ -121,7 +138,6 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(29,0);
 	};
 	
-	check_port();
 	if(ps3dat->button[PAD_KEY_CROSS]==1) return -1; // end of program
 	return 0;
 }
@@ -133,7 +149,6 @@ int ps3c_input(struct ps3ctls *ps3dat) {
 	struct js_event ev;
 
 	do {
-		check_port();
 		rp = read(ps3dat->fd, &ev, sizeof(struct js_event));
 		if (rp != sizeof(struct js_event)) {
 			return -1;
@@ -198,7 +213,7 @@ int ps3c_init(struct ps3ctls *ps3dat, const char *df) {
 	unsigned char nr_btn;
 	unsigned char nr_stk;
 	unsigned char *p;
-	int i;
+	long int i,j;
 	
 	ps3dat->fd = open(df, O_RDONLY);
 	if (ps3dat->fd < 0) return -1;
@@ -232,6 +247,10 @@ int ps3c_init(struct ps3ctls *ps3dat, const char *df) {
 //	ps3dat->stick [PAD_RIGHT_Y]=0;
 	timWheel = digitalRead(12);
 	
+	clr_LCD();
+	set_posLCD(0);
+	for (i=0;i<20;i++) {for (j=0;j<5000000;j++);put_LCD(0xff);};
+	system("mpg123 /home/pi/Music/MacQuadra.mp3 &");
 	clr_LCD();
 	set_posLCD(0);
 	put_LCDstring("Hello!");
@@ -275,7 +294,6 @@ void main() {
 		if(!(ps3c_init(&ps3dat, df))) {
 
 			do {
-				check_port();
 				if (ps3c_test(&ps3dat) < 0) break;
 				if(digitalRead( 3)) {
 					digitalWrite(4,1);
