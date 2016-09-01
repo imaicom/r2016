@@ -84,6 +84,7 @@ int check_port() {
 		softPwmWrite(28,0); // motor 2 off
 		softPwmWrite(29,0);
 		softPwmWrite(25,0); // beep off
+		sleep(1);
 		system("sudo shutdown -h now &");
 	};
 	if(digitalRead(13)+digitalRead(14)>0) {
@@ -210,6 +211,22 @@ int ps3c_init(struct ps3ctls *ps3dat, const char *df) {
 	unsigned char nr_stk;
 	unsigned char *p;
 	long int i,j;
+
+	clr_LCD();
+	set_posLCD(0);
+	for (i=0;i<20;i++) {for (j=0;j<5000000;j++);put_LCD(0xff);};
+	system("mpg123 /home/pi/Music/MacQuadra.mp3");
+	clr_LCD();
+	set_posLCD(0);
+	put_LCDstring("Hello!");
+	set_posLCD(0x40);
+	put_LCDstring("I'm WALL-E.");
+	sleep(1);
+	set_posLCD(0);
+	put_LCDstring("                ");
+	
+	before_bar = check_file("bar");
+	before_cntWheel = check_file("cntWheel");
 	
 	ps3dat->fd = open(df, O_RDONLY);
 	if (ps3dat->fd < 0) return -1;
@@ -229,25 +246,7 @@ int ps3c_init(struct ps3ctls *ps3dat, const char *df) {
 	}
 	ps3dat->button = (short *)p;
 	ps3dat->stick  = (short *)&p[nr_btn * sizeof(short)];
-	
-	timWheel = digitalRead(12);
-	
-	clr_LCD();
-	set_posLCD(0);
-	for (i=0;i<20;i++) {for (j=0;j<5000000;j++);put_LCD(0xff);};
-	system("mpg123 /home/pi/Music/MacQuadra.mp3");
-	clr_LCD();
-	set_posLCD(0);
-	put_LCDstring("Hello!");
-	set_posLCD(0x40);
-	put_LCDstring("I'm WALL-E.");
-	sleep(2);
-	set_posLCD(0);
-	put_LCDstring("                ");
-	
-	before_bar = check_file("bar");
-	before_cntWheel = check_file("cntWheel");
-	
+			
 	return 0;
 }
 
@@ -292,15 +291,53 @@ void main() {
 					break;
 				};
 				set_posLCD(64);
-				temp = check_file("bar") - before_bar;
-				sprintf(lcd_buff , " %5d",temp);
+				sprintf(lcd_buff , " %5d",check_file("bar") - before_bar);
 				put_LCDstring(lcd_buff);
-				temp = check_file("cntWheel") - before_cntWheel;
-				sprintf(lcd_buff , " %8d",temp);
+				sprintf(lcd_buff , " %8d",check_file("cntWheel") - before_cntWheel);
 				put_LCDstring(lcd_buff);
 			} while (!(ps3c_input(&ps3dat)));
 		
 			ps3c_exit(&ps3dat);		
+		} else {
+			// Automatic
+			set_posLCD(0);
+			put_LCDstring("Automatic");
+			set_posLCD(64);
+			sprintf(lcd_buff , " %5d",check_file("bar") - before_bar);
+			put_LCDstring(lcd_buff);
+			sprintf(lcd_buff , " %8d",check_file("cntWheel") - before_cntWheel);
+			put_LCDstring(lcd_buff);
+
+			while(1) {
+				set_posLCD(0);
+				put_LCDstring("Automatic");
+				while(digitalRead( 6));
+				softPwmWrite(25,50);
+				sleep(1);
+				softPwmWrite(25,0);
+				sleep(1);
+
+				softPwmWrite(16,50);
+				softPwmWrite( 1, 0);
+				softPwmWrite(28,50);
+				softPwmWrite(29,00);
+				sleep(1);
+			
+				softPwmWrite(16, 0);
+				softPwmWrite( 1, 0);
+				softPwmWrite(28, 0);
+				softPwmWrite(29, 0);
+				sleep(1);
+			
+				set_posLCD(64);
+				sprintf(lcd_buff , " %5d",check_file("bar") - before_bar);
+				put_LCDstring(lcd_buff);
+				sprintf(lcd_buff , " %8d",check_file("cntWheel") - before_cntWheel);
+				put_LCDstring(lcd_buff);
+				set_posLCD(0);
+				put_LCDstring("Terminate");
+				sleep(1);
+			};
 		};
 //	};
 }
