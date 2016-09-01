@@ -29,6 +29,33 @@ int s0 = 0;
 int s1 = 0;
 unsigned int timWheel;
 int cntWheel = 0;
+char lcd_buff[60] = "";
+long int before_bar , before_cntWheel;
+
+int clr_LCD() {
+	system("i2cset -y 1 0x50 0x00 0x01"); // Clear Display
+	system("i2cset -y 1 0x50 0x00 0x38"); // Function Set 8Bit-Mode , 2Line-Mode
+	system("i2cset -y 1 0x50 0x00 0x0c"); // Display On , Cursor Off , Blinking Off
+	system("i2cset -y 1 0x50 0x00 0x06"); // Entry Mode Set
+}
+
+int set_posLCD(char p) {
+	int fd;
+	fd = wiringPiI2CSetup(0x50);	// ACM1602NI
+	wiringPiI2CWriteReg8(fd , 0x00 , p|0x80);
+	sleep(0.002);	
+}
+
+int put_LCD(char a) {
+	int fd;
+	fd = wiringPiI2CSetup(0x50);	// ACM1602NI
+	wiringPiI2CWriteReg8(fd , 0x80 , a);
+	sleep(0.002);	
+}
+
+void put_LCDstring(char *str) {
+	while(*str != '\0') put_LCD(*str++);
+}
 
 int check_file(char fnp[256]) {
 	
@@ -72,9 +99,9 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	unsigned char nr_btn = ps3dat->nr_buttons;
 	unsigned char nr_stk = ps3dat->nr_sticks;
 	int m1,m2;
+	long int temp;
 
-//	printf("%d %d\n",nr_btn,nr_stk);
-
+/*
   	printf(" 1=%2d ",ps3dat->button[PAD_KEY_LEFT]);
 	printf(" 2=%2d ",ps3dat->button[PAD_KEY_RIGHT]);
 	printf(" 3=%2d ",ps3dat->button[PAD_KEY_UP]);
@@ -91,6 +118,16 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	printf(" e=%4d ",check_file("cntWheel"));
 	printf(" f=%4d ",digitalRead( 5));
 	printf(" g=%4d ",digitalRead( 6));
+	printf("\n"); 
+	*/
+	
+	set_posLCD(64);
+	temp = check_file("bar") - before_bar;
+	sprintf(lcd_buff , " %5d",temp);
+	put_LCDstring(lcd_buff);
+	temp = check_file("cntWheel") - before_cntWheel;
+	sprintf(lcd_buff , " %8d",temp);
+	put_LCDstring(lcd_buff);
 
 	if (ps3dat->button[PAD_KEY_TRIANGLE]) {
 		digitalWrite(7,1);
@@ -104,14 +141,6 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(25,0);
 	};
 	
-//	if (ps3dat->button[PAD_KEY_LEFT])	{ s0++; if(s0 > +200) s0 = +200; };
-//	if (ps3dat->button[PAD_KEY_RIGHT])	{ s0--; if(s0 < -200) s0 = -200; };
-//	if (ps3dat->button[PAD_KEY_UP]) 	{ s1++; if(s1 > +200) s1 = +200; };
-//	if (ps3dat->button[PAD_KEY_DOWN])	{ s1--; if(s1 < -200) s1 = -200; };
-
-//	printf(" s0=%4d ",s0);
-//	printf(" s1=%4d ",s1);
-	printf("\n"); 
 
 	m1 = ps3dat->stick [PAD_LEFT_Y ];
 	m2 = ps3dat->stick [PAD_RIGHT_Y];
@@ -174,7 +203,6 @@ int ps3c_input(struct ps3ctls *ps3dat) {
 	return 0;
 }
 
-
 int ps3c_getinfo(struct ps3ctls *ps3dat) {
 
 	if(ioctl(ps3dat->fd , JSIOCGBUTTONS , &ps3dat->nr_buttons) < 0) return -1;
@@ -183,30 +211,6 @@ int ps3c_getinfo(struct ps3ctls *ps3dat) {
 	return 0;
 }
 
-int clr_LCD() {
-	system("sudo i2cset -y 1 0x50 0x00 0x01"); // Clear Display
-	system("sudo i2cset -y 1 0x50 0x00 0x38"); // Function Set 8Bit-Mode , 2Line-Mode
-	system("sudo i2cset -y 1 0x50 0x00 0x0c"); // Display On , Cursor Off , Blinking Off
-	system("sudo i2cset -y 1 0x50 0x00 0x06"); // Entry Mode Set
-}
-
-int set_posLCD(char p) {
-	int fd;
-	fd = wiringPiI2CSetup(0x50);	// ACM1602NI
-	wiringPiI2CWriteReg8(fd , 0x00 , p|0x80);
-	sleep(0.002);	
-}
-
-int put_LCD(char a) {
-	int fd;
-	fd = wiringPiI2CSetup(0x50);	// ACM1602NI
-	wiringPiI2CWriteReg8(fd , 0x80 , a);
-	sleep(0.002);	
-}
-
-void put_LCDstring(char *str) {
-	while(*str != '\0') put_LCD(*str++);
-}
 
 int ps3c_init(struct ps3ctls *ps3dat, const char *df) {
 
@@ -225,7 +229,6 @@ int ps3c_init(struct ps3ctls *ps3dat, const char *df) {
 
 	nr_btn = ps3dat->nr_buttons;
 	nr_stk = ps3dat->nr_sticks;
-//	printf("%d %d\n",nr_btn,nr_stk);
 
 	p = calloc(nr_btn + nr_stk , sizeof(short));
 	if (p == NULL) {
@@ -235,28 +238,24 @@ int ps3c_init(struct ps3ctls *ps3dat, const char *df) {
 	ps3dat->button = (short *)p;
 	ps3dat->stick  = (short *)&p[nr_btn * sizeof(short)];
 	
-//	for (i = 0; i<nr_btn; i++) ps3dat->button[i] = 0;
-//	for (i = 0; i<nr_stk; i++) ps3dat->stick [i] = 0;
-//	ps3dat->button[PAD_KEY_LEFT]=0;
-//	ps3dat->button[PAD_KEY_RIGHT]=0;
-//	ps3dat->button[PAD_KEY_UP]=0;;
-//	ps3dat->button[PAD_KEY_DOWN]=0;
-//	ps3dat->stick [PAD_LEFT_X]=0;
-//	ps3dat->stick [PAD_LEFT_Y]=0;
-//	ps3dat->stick [PAD_RIGHT_X]=0;
-//	ps3dat->stick [PAD_RIGHT_Y]=0;
 	timWheel = digitalRead(12);
 	
 	clr_LCD();
 	set_posLCD(0);
 	for (i=0;i<20;i++) {for (j=0;j<5000000;j++);put_LCD(0xff);};
-	system("mpg123 /home/pi/Music/MacQuadra.mp3 &");
+	system("mpg123 /home/pi/Music/MacQuadra.mp3");
 	clr_LCD();
 	set_posLCD(0);
 	put_LCDstring("Hello!");
 	set_posLCD(0x40);
 	put_LCDstring("I'm WALL-E.");
-
+	sleep(2);
+	set_posLCD(0);
+	put_LCDstring("                ");
+	
+	before_bar = check_file("bar");
+	before_cntWheel = check_file("cntWheel");
+	
 	return 0;
 }
 
@@ -290,7 +289,7 @@ void main() {
 	pinMode(4,OUTPUT);digitalWrite(4,0);
 	pinMode(7,OUTPUT);digitalWrite(7,0);
 	
-//	while(1) {
+	while(1) {
 		if(!(ps3c_init(&ps3dat, df))) {
 
 			do {
@@ -303,6 +302,6 @@ void main() {
 		
 			ps3c_exit(&ps3dat);		
 		};
-//	};
+	};
 }
 
