@@ -43,14 +43,14 @@ int set_posLCD(char p) {
 	int fd;
 	fd = wiringPiI2CSetup(0x50);	// ACM1602NI
 	wiringPiI2CWriteReg8(fd , 0x00 , p|0x80);
-	sleep(0.002);	
+    nanosleep(10000);
 }
 
 int put_LCD(char a) {
 	int fd;
 	fd = wiringPiI2CSetup(0x50);	// ACM1602NI
 	wiringPiI2CWriteReg8(fd , 0x80 , a);
-	sleep(0.002);	
+    nanosleep(10000);
 }
 
 void put_LCDstring(char *str) {
