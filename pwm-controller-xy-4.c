@@ -312,10 +312,11 @@ void main() {
 				set_posLCD(0);
 				put_LCDstring("Automatic");
 				while(digitalRead( 6));
-				softPwmWrite(25,50);
-				sleep(1);
-				softPwmWrite(25,0);
-				sleep(1);
+				system("mpg123 /home/pi/Music/forward.mp3");
+//				softPwmWrite(25,50);
+//				sleep(1);
+//				softPwmWrite(25,0);
+//				sleep(1);
 
 				softPwmWrite(16,50);softPwmWrite( 1, 0);
 				softPwmWrite(28,50);softPwmWrite(29, 0);
