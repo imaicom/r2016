@@ -13,7 +13,6 @@
 #include "controller.h"
 #include <math.h>
 
-
 struct ps3ctls {
 	
 	int fd;
@@ -87,11 +86,11 @@ int check_port() {
 		sleep(1);
 		system("sudo shutdown -h now &");
 	};
-	if(digitalRead(13)+digitalRead(14)>0) {
-		softPwmWrite(25,50);
-	} else {
-		softPwmWrite(25,0);
-	};
+//	if(digitalRead(13)+digitalRead(14)>0) {
+//		softPwmWrite(25,50);
+//	} else {
+//		softPwmWrite(25,0);
+//	};
 }
 
 int ps3c_test(struct ps3ctls *ps3dat) {
@@ -119,8 +118,12 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	printf(" e=%4d ",check_file("cntWheel"));
 	printf(" f=%4d ",digitalRead( 5));
 	printf(" g=%4d ",digitalRead( 6));
-	printf("\n"); 
 	*/
+	printf(" a=%4d ",digitalRead(21));
+	printf(" b=%4d ",digitalRead(22));
+	printf(" c=%4d ",digitalRead(23));
+	printf(" d=%4d ",digitalRead(24));
+	printf("\n"); 
 
 	if (ps3dat->button[PAD_KEY_TRIANGLE]) {
 		digitalWrite(7,1);
@@ -135,8 +138,9 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	};
 	
 
-	m1 = ps3dat->stick [PAD_LEFT_Y ];
-	m2 = ps3dat->stick [PAD_RIGHT_Y];
+	m2 = ps3dat->stick [PAD_LEFT_Y ];
+//	m2 = ps3dat->stick [PAD_RIGHT_Y];
+	m1 = m2 * 9/10;
 
 	if(abs(m1) < 5) {
 		softPwmWrite(16,0);
@@ -256,12 +260,12 @@ void ps3c_exit   (struct ps3ctls *ps3dat) {
 	close(ps3dat->fd);
 }
 
-
 void main() {
 
 	char *df = "/dev/input/js0";
 	struct ps3ctls ps3dat;
 	long int temp;
+	int before_digital = 0;
 
 	wiringPiSetup();
 	softPwmCreate(16,0,20); // start-0 10ms
@@ -272,8 +276,12 @@ void main() {
 
 	pinMode( 3,INPUT);pullUpDnControl( 3,PUD_UP);
 	pinMode(12,INPUT);pullUpDnControl(12,PUD_UP);
-	pinMode(13,INPUT);pullUpDnControl(13,PUD_UP);
-	pinMode(14,INPUT);pullUpDnControl(14,PUD_UP);
+//	pinMode(13,INPUT);pullUpDnControl(13,PUD_UP);
+//	pinMode(14,INPUT);pullUpDnControl(14,PUD_UP);
+	pinMode(21,INPUT);pullUpDnControl(21,PUD_UP);
+	pinMode(22,INPUT);pullUpDnControl(22,PUD_UP);
+	pinMode(23,INPUT);pullUpDnControl(23,PUD_UP);
+	pinMode(24,INPUT);pullUpDnControl(24,PUD_UP);
 	pinMode(15,INPUT);pullUpDnControl(15,PUD_UP);
 	pinMode( 5,INPUT);pullUpDnControl( 5,PUD_UP);
 	pinMode( 6,INPUT);pullUpDnControl( 6,PUD_UP);
@@ -290,11 +298,31 @@ void main() {
 					digitalWrite(4,1);
 					break;
 				};
-				set_posLCD(64);
-				sprintf(lcd_buff , " %5d",check_file("bar") - before_bar);
-				put_LCDstring(lcd_buff);
-				sprintf(lcd_buff , " %8d",check_file("cntWheel") - before_cntWheel);
-				put_LCDstring(lcd_buff);
+//				if(before_digital != digitalRead(13)+digitalRead(14)) {
+//					before_digital = digitalRead(13)+digitalRead(14);
+//					set_posLCD(64);
+//					sprintf(lcd_buff , " %5d",check_file("bar") - before_bar);
+//					put_LCDstring(lcd_buff);
+//					sprintf(lcd_buff , " %8d",check_file("cntWheel") - before_cntWheel);
+//					put_LCDstring(lcd_buff);
+//				};
+				
+				if(!digitalRead(5)){
+					before_bar = check_file("bar");
+					before_cntWheel = check_file("cntWheel");
+					set_posLCD(64);
+					sprintf(lcd_buff , " %5d",check_file("bar") - before_bar);
+					put_LCDstring(lcd_buff);
+					sprintf(lcd_buff , " %8d",check_file("cntWheel") - before_cntWheel);
+					put_LCDstring(lcd_buff);
+				};
+				
+				if(digitalRead(21)+digitalRead(22)+digitalRead(23)+digitalRead(24)==4) {
+					softPwmWrite(25,0);
+				} else {
+					softPwmWrite(25,50);
+				};
+
 			} while (!(ps3c_input(&ps3dat)));
 		
 			ps3c_exit(&ps3dat);		
