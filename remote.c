@@ -1,4 +1,4 @@
-// cc -o pwm-controller-xy-rm pwm-controller-xy-rm.c -lwiringPi -lm
+// cc -o remote remote.c -lwiringPi -lm
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
