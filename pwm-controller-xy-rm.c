@@ -28,7 +28,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	unsigned char i;
 	unsigned char nr_btn = ps3dat->nr_buttons;
 	unsigned char nr_stk = ps3dat->nr_sticks;
-	int xx,yy,x,y;
+	int xx,yy,x,y,z;
 	
 //	printf("%d %d\n",nr_btn,nr_stk);
 
@@ -69,6 +69,25 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(6,0);
 	};
 	
+	z = ps3dat->stick [PAD_RIGHT_X];
+
+	if(abs(z) < 5) {
+		softPwmWrite(28,0);
+		softPwmWrite(29,0);
+		softPwmWrite(24,0);
+		softPwmWrite(25,0);
+	} else if(z > 0) {
+		softPwmWrite(28,0);
+		softPwmWrite(29,abs(z));
+		softPwmWrite(24,abs(z));
+		softPwmWrite(25,0);
+	} else {
+		softPwmWrite(28,abs(z));
+		softPwmWrite(29,0);
+		softPwmWrite(24,0);
+		softPwmWrite(25,abs(z));
+	};
+
 	if(ps3dat->button[PAD_KEY_CROSS]==1) return -1; // end of program
 
 	return 0;
@@ -169,14 +188,16 @@ void main() {
 	struct ps3ctls ps3dat;
 
 	wiringPiSetup();
-	softPwmCreate(1,0,20); // start-0 10ms
-	softPwmCreate(4,0,20); // start-0 10ms
-	softPwmCreate(5,0,20); // start-0 10ms
-	softPwmCreate(6,0,20); // start-0 10ms
-	softPwmCreate(26,0,20); // start-0 10ms
-	softPwmCreate(27,0,20); // start-0 10ms
-	softPwmCreate(28,0,20); // start-0 10ms
-	softPwmCreate(29,0,20); // start-0 10ms
+	softPwmCreate(5,0,20); // motor-1 10ms
+	softPwmCreate(6,0,20); // motor-1 10ms
+	softPwmCreate(26,0,20); // motor-2 10ms
+	softPwmCreate(27,0,20); // motor-2 10ms
+	softPwmCreate(28,0,20); // motor-3 10ms
+	softPwmCreate(29,0,20); // motor-3 10ms
+	softPwmCreate(24,0,20); // motor-4 10ms
+	softPwmCreate(25,0,20); // motor-4 10ms
+	softPwmCreate(14,0,20); // motor-5 10ms // NC
+	softPwmCreate(23,0,20); // motor-5 10ms // NC
 
 	if(!(ps3c_init(&ps3dat, df))) {
 
