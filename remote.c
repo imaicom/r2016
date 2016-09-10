@@ -22,6 +22,49 @@ struct ps3ctls {
 	short *stick;			// stick[nr_sticks]
 };
 
+int fds;
+#define saki3o 47
+#define saki4o 52
+#define saki5o 3
+int saki1  = 0;
+int saki2  = 0;
+int saki3  = saki3o;
+int saki4  = saki4o;
+int saki5  = saki5o;
+
+int resetPCA9685(int fd) {
+	wiringPiI2CWriteReg8(fd,0,0);
+}
+
+int setPCA9685Freq(int fd , float freq) {
+	float prescaleval;
+	int prescale , oldmode , newmode;
+	freq = 0.9 * freq;
+	prescaleval = 25000000.0;
+	prescaleval /= 4096.0;
+	prescaleval /= freq;
+	prescaleval -= 1.0;
+	prescale = prescaleval + 0.5;
+	oldmode = wiringPiI2CReadReg8(fd,0x00);
+	newmode = (oldmode & 0x7F)|0x10;
+	wiringPiI2CWriteReg8(fd , 0x00 , newmode);
+	wiringPiI2CWriteReg8(fd , 0xFE , prescale);
+	wiringPiI2CWriteReg8(fd , 0x00 , oldmode);
+	sleep(0.005);
+	wiringPiI2CWriteReg8(fd , 0x00 , oldmode | 0xA1);
+}
+
+
+int setPCA9685Duty(int fd , int channel , int off) {
+	int channelpos;
+	int on;
+	
+	on   = 0;
+	off += 276;
+	channelpos = 0x6 + 4 * channel;
+	wiringPiI2CWriteReg16(fd , channelpos   , on  & 0x0FFF);
+	wiringPiI2CWriteReg16(fd , channelpos+2 , off & 0x0FFF);
+}
 
 int ps3c_test(struct ps3ctls *ps3dat) {
 
@@ -68,6 +111,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(5,abs(y));
 		softPwmWrite(6,0);
 	};
+
 	
 	z = ps3dat->stick [PAD_RIGHT_X];
 
@@ -82,13 +126,21 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(24,abs(z));
 		softPwmWrite(25,0);
 	} else {
-		softPwmWrite(28,abs(z));
-		softPwmWrite(29,0);
+		softPwmWrite(28,0);
+		softPwmWrite(29,abs(z));
 		softPwmWrite(24,0);
 		softPwmWrite(25,abs(z));
+//		softPwmWrite(28,abs(z));
+//		softPwmWrite(29,0);
+//		softPwmWrite(24,0);
+//		softPwmWrite(25,abs(z));
 	};
 
-	if(ps3dat->button[PAD_KEY_CROSS]==1) return -1; // end of program
+
+	setPCA9685Duty(fds , 0 , ps3dat->stick [PAD_RIGHT_X]);
+	setPCA9685Duty(fds , 1 , ps3dat->stick [PAD_RIGHT_X]);
+
+//	if(ps3dat->button[PAD_KEY_CROSS]==1) return -1; // end of program
 
 	return 0;
 }
@@ -198,6 +250,10 @@ void main() {
 	softPwmCreate(25,0,20); // motor-4 10ms
 	softPwmCreate(14,0,20); // motor-5 10ms // NC
 	softPwmCreate(23,0,20); // motor-5 10ms // NC
+
+	fds = wiringPiI2CSetup(0x40);	// PCA9685
+	resetPCA9685(fds);
+	setPCA9685Freq(fds,50);
 
 	if(!(ps3c_init(&ps3dat, df))) {
 
