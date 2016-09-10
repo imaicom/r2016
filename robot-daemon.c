@@ -47,7 +47,7 @@ void main() {
 	pinMode(15,INPUT);pullUpDnControl(15,PUD_UP); // ball
 	pinMode( 5,INPUT);pullUpDnControl( 5,PUD_UP); // kill sw(red)
 	pinMode( 6,INPUT);pullUpDnControl( 6,PUD_UP); // start sw(white)
-	system("sudo /home/pi/Pi-PWM/pwm-controller-xy-4 &");
+	system("sudo /home/pi/robot/self &");
 	
 	while(1) {
 		
@@ -62,6 +62,18 @@ void main() {
 //			Bar++;
 //		};
 		
+//		if(digitalRead(21)+digitalRead(22)+digitalRead(23)+digitalRead(24)==4) tmp = 1; else tmp = 0;
+//		if(timBar != tmp) {
+//			if(digitalRead(21)+digitalRead(22)+digitalRead(23)+digitalRead(24)==4) timBar = 1; else timBar = 0;
+//			Bar++;
+//		};
+
+		if(digitalRead(22)+digitalRead(23)==2) tmp = 1; else tmp = 0;
+		if(timBar != tmp) {
+			if(digitalRead(22)+digitalRead(23)==2) timBar = 1; else timBar = 0;
+			Bar++;
+		};
+
 		check_port("program-sw"	,digitalRead( 3) );
 		check_port("cntWheel"		,cntWheel );
 		check_port("bar"			,Bar );

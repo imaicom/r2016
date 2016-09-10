@@ -298,13 +298,13 @@ void main() {
 					digitalWrite(4,1);
 					break;
 				};
-//				if(before_digital != digitalRead(13)+digitalRead(14)) {
-//					before_digital = digitalRead(13)+digitalRead(14);
-//					set_posLCD(64);
-//					sprintf(lcd_buff , " %5d",check_file("bar") - before_bar);
-//					put_LCDstring(lcd_buff);
-//					sprintf(lcd_buff , " %8d",check_file("cntWheel") - before_cntWheel);
-//					put_LCDstring(lcd_buff);
+//				if(before_digital != digitalRead(21)+digitalRead(22)+digitalRead(23)+digitalRead(24)) {
+//					before_digital = digitalRead(21)+digitalRead(22)+digitalRead(23)+digitalRead(24);
+					set_posLCD(64);
+					sprintf(lcd_buff , " %5d",check_file("bar") - before_bar);
+					put_LCDstring(lcd_buff);
+					sprintf(lcd_buff , " %8d",check_file("cntWheel") - before_cntWheel);
+					put_LCDstring(lcd_buff);
 //				};
 				
 				if(!digitalRead(5)){
@@ -317,7 +317,7 @@ void main() {
 					put_LCDstring(lcd_buff);
 				};
 				
-				if(digitalRead(21)+digitalRead(22)+digitalRead(23)+digitalRead(24)==4) {
+				if(digitalRead(22)+digitalRead(23)==2) {
 					softPwmWrite(25,0);
 				} else {
 					softPwmWrite(25,50);
@@ -340,20 +340,81 @@ void main() {
 				set_posLCD(0);
 				put_LCDstring("Automatic");
 				while(digitalRead( 6));
+				before_bar = check_file("bar");
+
 				system("mpg123 /home/pi/Music/forward.mp3");
 //				softPwmWrite(25,50);
 //				sleep(1);
 //				softPwmWrite(25,0);
 //				sleep(1);
 
-				softPwmWrite(16,50);softPwmWrite( 1, 0);
-				softPwmWrite(28,50);softPwmWrite(29, 0);
-				sleep(1);
+				softPwmWrite(16,100);softPwmWrite( 1, 0);
+				softPwmWrite(28, 90);softPwmWrite(29, 0);
+//				while((check_file("bar") - before_bar) != 1);
+//				while((check_file("bar") - before_bar)%4 != 4);
+				
+//				while((check_file("bar") - before_bar)%4 != 0) ;
+//				while((check_file("bar") - before_bar) <= 24) {  // 3
+				while((check_file("bar") - before_bar) <= 24) {
+					printf("%d\n",check_file("bar") - before_bar);
+				};
 			
 				softPwmWrite(16, 0);softPwmWrite( 1, 0);
 				softPwmWrite(28, 0);softPwmWrite(29, 0);
 				sleep(1);
+				
+				if(digitalRead(24)) {
+					softPwmWrite(16,8);softPwmWrite( 1, 0);//while(!digitalRead(21));
+				} else {
+					softPwmWrite(28,8);softPwmWrite(29, 0);//while(!digitalRead(24));
+				};
+				sleep(1);
+				
+				softPwmWrite(16, 0);softPwmWrite( 1, 0);
+				softPwmWrite(28, 0);softPwmWrite(29, 0);
+				sleep(1);
+
+				before_cntWheel = check_file("cntWheel");
+				softPwmWrite(16,100);softPwmWrite( 1, 0);
+				softPwmWrite(28, 90);softPwmWrite(29, 0);
+				
+				while((check_file("cntWheel") - before_cntWheel) <= 20) {
+					printf("%d\n",check_file("cntWheel") - before_bar);
+				};
+
+				softPwmWrite(16, 0);softPwmWrite( 1, 0);
+				softPwmWrite(28, 0);softPwmWrite(29, 0);
+				sleep(1);
+				
+				digitalWrite(7,1);
+				sleep(1);
+				digitalWrite(7,0);
+				sleep(1); // delete item
+
+				before_bar = check_file("bar");
+				softPwmWrite(16,100);softPwmWrite( 1, 0);
+				softPwmWrite(28, 90);softPwmWrite(29, 0);
+
+				while((check_file("bar") - before_bar) <= 36) {
+					printf("%d\n",check_file("bar") - before_bar);
+				};
 			
+				softPwmWrite(16, 0);softPwmWrite( 1, 0);
+				softPwmWrite(28, 0);softPwmWrite(29, 0);
+				sleep(1);
+
+				before_cntWheel = check_file("cntWheel");
+				softPwmWrite(16,100);softPwmWrite( 1, 0);
+				softPwmWrite(28, 90);softPwmWrite(29, 0);
+				
+				while((check_file("cntWheel") - before_cntWheel) <= 4) {
+					printf("%d\n",check_file("cntWheel") - before_bar);
+				};
+
+				softPwmWrite(16, 0);softPwmWrite( 1, 0);
+				softPwmWrite(28, 0);softPwmWrite(29, 0);
+				sleep(1);
+
 				set_posLCD(64);
 				sprintf(lcd_buff , " %5d",check_file("bar") - before_bar);
 				put_LCDstring(lcd_buff);
