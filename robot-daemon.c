@@ -42,6 +42,7 @@ void main() {
 //	pinMode(14,INPUT);pullUpDnControl(14,PUD_UP); // gnd-sensor2
 	pinMode(21,INPUT);pullUpDnControl(21,PUD_UP); // gnd-sensor1
 	pinMode(22,INPUT);pullUpDnControl(22,PUD_UP); // gnd-sensor2
+	pinMode(30,INPUT);pullUpDnControl(30,PUD_UP); // gnd-sensor center
 	pinMode(23,INPUT);pullUpDnControl(23,PUD_UP); // gnd-sensor3
 	pinMode(24,INPUT);pullUpDnControl(24,PUD_UP); // gnd-sensor4
 	pinMode(15,INPUT);pullUpDnControl(15,PUD_UP); // ball
@@ -68,9 +69,15 @@ void main() {
 //			Bar++;
 //		};
 
-		if(digitalRead(22)+digitalRead(23)==2) tmp = 1; else tmp = 0;
+//		if(digitalRead(22)+digitalRead(23)==2) tmp = 1; else tmp = 0;
+//		if(timBar != tmp) {
+//			if(digitalRead(22)+digitalRead(23)==2) timBar = 1; else timBar = 0;
+//			Bar++;
+//		};
+
+		if(digitalRead(30)==1) tmp = 1; else tmp = 0;
 		if(timBar != tmp) {
-			if(digitalRead(22)+digitalRead(23)==2) timBar = 1; else timBar = 0;
+			if(digitalRead(30)==1) timBar = 1; else timBar = 0;
 			Bar++;
 		};
 

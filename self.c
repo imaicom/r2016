@@ -121,6 +121,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	*/
 	printf(" a=%4d ",digitalRead(21));
 	printf(" b=%4d ",digitalRead(22));
+	printf(" e=%4d ",digitalRead(30));
 	printf(" c=%4d ",digitalRead(23));
 	printf(" d=%4d ",digitalRead(24));
 	printf("\n"); 
@@ -278,10 +279,11 @@ void main() {
 	pinMode(12,INPUT);pullUpDnControl(12,PUD_UP);
 //	pinMode(13,INPUT);pullUpDnControl(13,PUD_UP);
 //	pinMode(14,INPUT);pullUpDnControl(14,PUD_UP);
-	pinMode(21,INPUT);pullUpDnControl(21,PUD_UP);
-	pinMode(22,INPUT);pullUpDnControl(22,PUD_UP);
-	pinMode(23,INPUT);pullUpDnControl(23,PUD_UP);
-	pinMode(24,INPUT);pullUpDnControl(24,PUD_UP);
+	pinMode(21,INPUT);pullUpDnControl(21,PUD_UP); // 1
+	pinMode(22,INPUT);pullUpDnControl(22,PUD_UP); // 2
+	pinMode(30,INPUT);pullUpDnControl(30,PUD_UP); // center
+	pinMode(23,INPUT);pullUpDnControl(23,PUD_UP); // 3
+	pinMode(24,INPUT);pullUpDnControl(24,PUD_UP); // 4
 	pinMode(15,INPUT);pullUpDnControl(15,PUD_UP);
 	pinMode( 5,INPUT);pullUpDnControl( 5,PUD_UP);
 	pinMode( 6,INPUT);pullUpDnControl( 6,PUD_UP);
@@ -339,7 +341,14 @@ void main() {
 			while(1) {
 				set_posLCD(0);
 				put_LCDstring("Automatic");
-				while(digitalRead( 6));
+				while(digitalRead( 6)) {
+//					printf(" a=%4d ",digitalRead(21));
+//					printf(" b=%4d ",digitalRead(22));
+//					printf(" e=%4d ",digitalRead(30));
+//					printf(" c=%4d ",digitalRead(23));
+//					printf(" d=%4d ",digitalRead(24));
+					printf("\n"); 
+				};
 				before_bar = check_file("bar");
 
 				system("mpg123 /home/pi/Music/forward.mp3");
