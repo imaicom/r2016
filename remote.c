@@ -138,10 +138,15 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 
 
 	setPCA9685Duty(fds , 0 , ps3dat->stick [PAD_RIGHT_X]);
-	setPCA9685Duty(fds , 1 , ps3dat->stick [PAD_RIGHT_X]);
+	setPCA9685Duty(fds , 1 , ps3dat->stick [PAD_RIGHT_X]-10);
 
-//	if(ps3dat->button[PAD_KEY_CROSS]==1) return -1; // end of program
-
+	if(ps3dat->button[PAD_KEY_CROSS]==1) {
+		softPwmWrite(28,0);
+		softPwmWrite(29,0);
+		softPwmWrite(24,0);
+		softPwmWrite(25,0);
+		return -1; // end of program
+	};
 	return 0;
 }
 
