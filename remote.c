@@ -31,6 +31,12 @@ int saki2  = 0;
 int saki3  = saki3o;
 int saki4  = saki4o;
 int saki5  = saki5o;
+int mode = 0;
+int btn_tri = 0;
+int b_btn_tri = 0;
+int servo00 = 0;
+int servo01 = 0;
+int servo02 = 0;
 
 int resetPCA9685(int fd) {
 	wiringPiI2CWriteReg8(fd,0,0);
@@ -75,14 +81,19 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	
 //	printf("%d %d\n",nr_btn,nr_stk);
 
-  	printf(" 1=%2d ",ps3dat->button[PAD_KEY_LEFT]);
-	printf(" 2=%2d ",ps3dat->button[PAD_KEY_RIGHT]);
-	printf(" 3=%2d ",ps3dat->button[PAD_KEY_UP]);
-	printf(" 4=%2d ",ps3dat->button[PAD_KEY_DOWN]);
-	printf(" 5=%4d ",ps3dat->stick [PAD_LEFT_X]);
-	printf(" 6=%4d ",ps3dat->stick [PAD_LEFT_Y]);
-	printf(" 7=%4d ",ps3dat->stick [PAD_RIGHT_X]);
-	printf(" 8=%4d ",ps3dat->stick [PAD_RIGHT_Y]);
+//  	printf(" 1=%2d ",ps3dat->button[PAD_KEY_LEFT]);
+//	printf(" 2=%2d ",ps3dat->button[PAD_KEY_RIGHT]);
+//	printf(" 3=%2d ",ps3dat->button[PAD_KEY_UP]);
+//	printf(" 4=%2d ",ps3dat->button[PAD_KEY_DOWN]);
+//	printf(" 5=%4d ",ps3dat->stick [PAD_LEFT_X]);
+//	printf(" 6=%4d ",ps3dat->stick [PAD_LEFT_Y]);
+//	printf(" 7=%4d ",ps3dat->stick [PAD_RIGHT_X]);
+	printf(" 00=%4d ",servo00);
+	printf(" 01=%4d ",servo01);
+	printf(" 02=%4d ",servo02);
+	printf(" mode=%2d ",mode);
+	printf(" btn_tri=%2d ",btn_tri);
+	//	printf(" 8=%4d ",ps3dat->stick [PAD_RIGHT_Y]);
 	printf("\n"); 
 
 	xx = ps3dat->stick [PAD_LEFT_X];
@@ -121,32 +132,90 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(24,0);
 		softPwmWrite(25,0);
 	} else if(z > 0) {
-		softPwmWrite(28,0);
-		softPwmWrite(29,abs(z));
-		softPwmWrite(24,abs(z));
-		softPwmWrite(25,0);
+//		softPwmWrite(28,0);
+//		softPwmWrite(29,abs(z));
+//		softPwmWrite(24,abs(z));
+//		softPwmWrite(25,0);
 	} else {
-		softPwmWrite(28,0);
-		softPwmWrite(29,abs(z));
-		softPwmWrite(24,0);
-		softPwmWrite(25,abs(z));
-//		softPwmWrite(28,abs(z));
-//		softPwmWrite(29,0);
+//		softPwmWrite(28,0);
+//		softPwmWrite(29,abs(z));
 //		softPwmWrite(24,0);
 //		softPwmWrite(25,abs(z));
+
 	};
 
 
-	setPCA9685Duty(fds , 0 , ps3dat->stick [PAD_RIGHT_X]);
-	setPCA9685Duty(fds , 1 , ps3dat->stick [PAD_RIGHT_X]-10);
+//	setPCA9685Duty(fds , 0 , ps3dat->stick [PAD_RIGHT_X]);
+//	setPCA9685Duty(fds , 1 , ps3dat->stick [PAD_RIGHT_X]);
 
-	if(ps3dat->button[PAD_KEY_CROSS]==1) {
+//	if(ps3dat->button[PAD_KEY_CROSS]==1) {
+//		softPwmWrite(28,0);
+//		softPwmWrite(29,0);
+//		softPwmWrite(24,0);
+//		softPwmWrite(25,0);
+//		return -1; // end of program
+//	};
+
+/*
+	if(ps3dat->button[PAD_KEY_TRIANGLE]) 	{ servo00++; };
+	if(ps3dat->button[PAD_KEY_CROSS]) 		{ servo00--; };
+	setPCA9685Duty(fds , 0 , servo00);
+
+	if(ps3dat->button[PAD_KEY_UP]) { servo01++; };
+	if(ps3dat->button[PAD_KEY_DOWN]) { servo01--; };
+	setPCA9685Duty(fds , 1 , servo01);
+
+	if(ps3dat->button[PAD_KEY_LEFT]) { servo02++; };
+	if(ps3dat->button[PAD_KEY_RIGHT]) { servo02--; };
+	setPCA9685Duty(fds , 2 , servo02);
+*/
+
+
+	if(ps3dat->button[PAD_KEY_TRIANGLE]) {
+		btn_tri++;
+	};
+
+	if(!ps3dat->button[PAD_KEY_TRIANGLE]) {
+		btn_tri = 0;
+	};
+	
+	if(b_btn_tri > btn_tri) {mode++;if(mode > 1) mode = 0;};
+	b_btn_tri = btn_tri;
+	
+	
+	if(mode == 0) {
+		setPCA9685Duty(fds , 0 ,  0);
+		setPCA9685Duty(fds , 1 , 10);
+		setPCA9685Duty(fds , 2 , +120);
+	};
+	if(mode == 1) {
+		setPCA9685Duty(fds , 0 , -70);
+		setPCA9685Duty(fds , 1 , -80);
+		setPCA9685Duty(fds , 2 , 0);
+		softPwmWrite(28,0);
+		softPwmWrite(29,20);
+		softPwmWrite(24,0);
+		softPwmWrite(25,20);
+		delay(1500);
+		
+		setPCA9685Duty(fds , 2 , +120);
 		softPwmWrite(28,0);
 		softPwmWrite(29,0);
+		
+		softPwmWrite(24,20);
+		softPwmWrite(25,0);
+		delay(400);
 		softPwmWrite(24,0);
 		softPwmWrite(25,0);
-		return -1; // end of program
+
+		mode = 2;
 	};
+
+//	if(ps3dat->button[PAD_KEY_CIRCLE]) {
+//		mode = 0;
+//	};
+
+
 	return 0;
 }
 
@@ -171,7 +240,7 @@ int ps3c_input(struct ps3ctls *ps3dat) {
 			break;
 		case JS_EVENT_AXIS:
 			if (ev.number < ps3dat->nr_sticks) {
-				ps3dat->stick[ev.number] = ev.value / 327; // range -32767 ~ +32768 -> -100 ~ +100
+				ps3dat->stick[ev.number] = ev.value / 200; // 327 range -32767 ~ +32768 -> -100 ~ +100
 			}
 			break;
 		default:
