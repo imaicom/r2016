@@ -36,9 +36,23 @@ int btn_tri = 0;
 int b_btn_tri = 0;
 int btn_cir = 0;
 int b_btn_cir = 0;
+int btn_up = 0;
+int b_btn_up = 0;
+int btn_down = 0;
+int b_btn_down = 0;
+int a_mode = 0;
+int b_mode = 0;
+
 int servo00 = 0;
 int servo01 = 0;
 int servo02 = 0;
+
+int servo03 = 40;
+int servo04 = 130;
+int servo04b = 0;
+int servo05 = 28;
+int servo05b = 0;
+int servo06 = -45;
 
 int resetPCA9685(int fd) {
 	wiringPiI2CWriteReg8(fd,0,0);
@@ -90,16 +104,23 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 //	printf(" 5=%4d ",ps3dat->stick [PAD_LEFT_X]);
 //	printf(" 6=%4d ",ps3dat->stick [PAD_LEFT_Y]);
 //	printf(" 7=%4d ",ps3dat->stick [PAD_RIGHT_X]);
-	printf(" 00=%4d ",servo00);
-	printf(" 01=%4d ",servo01);
-	printf(" 02=%4d ",servo02);
+	printf(" 03=%4d ",servo03);
+	printf(" 04=%4d ",servo04);
+	printf(" 04b=%4d ",servo04b);
+	printf(" 05=%4d ",servo05);
+	printf(" 05b=%4d ",servo05b);
+	printf(" 06=%4d ",servo06);
 	printf(" mode=%2d ",mode);
+	printf(" a_mode=%2d ",a_mode);
+	printf(" b_mode=%2d ",b_mode);
 	printf(" btn_tri=%2d ",btn_tri);
 	//	printf(" 8=%4d ",ps3dat->stick [PAD_RIGHT_Y]);
 	printf("\n"); 
 
 	xx = ps3dat->stick [PAD_LEFT_X];
 	yy = ps3dat->stick [PAD_LEFT_Y];
+	xx = 0; // imai
+	yy = 0; // imai
 	x = -xx * cos(-M_PI/4) - yy * sin(-M_PI/4);
 	y = -xx * sin(-M_PI/4) + yy * cos(-M_PI/4);
 
@@ -162,41 +183,124 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(ps3dat->button[PAD_KEY_TRIANGLE]) 	{ servo00++; };
 	if(ps3dat->button[PAD_KEY_CROSS]) 		{ servo00--; };
 	setPCA9685Duty(fds , 0 , servo00);
-
-	if(ps3dat->button[PAD_KEY_UP]) { servo01++; };
-	if(ps3dat->button[PAD_KEY_DOWN]) { servo01--; };
-	setPCA9685Duty(fds , 1 , servo01);
-
-	if(ps3dat->button[PAD_KEY_LEFT]) { servo02++; };
-	if(ps3dat->button[PAD_KEY_RIGHT]) { servo02--; };
-	setPCA9685Duty(fds , 2 , servo02);
 */
 
+//	if(ps3dat->button[PAD_KEY_UP]) { servo03++; };
+//	if(ps3dat->button[PAD_KEY_DOWN]) { servo03--; };
+//	setPCA9685Duty(fds , 3 , servo03);
 
-	if(ps3dat->button[PAD_KEY_TRIANGLE]) {
-		btn_tri++;
-	};
+//	if(ps3dat->button[PAD_KEY_LEFT]) { servo04++; };
+//	if(ps3dat->button[PAD_KEY_RIGHT]) { servo04--; };
+//	setPCA9685Duty(fds , 4 , servo04);
 
-	if(!ps3dat->button[PAD_KEY_TRIANGLE]) {
-		btn_tri = 0;
-	};
+//	if(ps3dat->button[PAD_KEY_UP]) { servo06++; };
+//	if(ps3dat->button[PAD_KEY_DOWN]) { servo06--; };
+//	setPCA9685Duty(fds , 6 , servo06);
 	
+	if(!ps3dat->button[PAD_KEY_L1] && !ps3dat->button[PAD_KEY_L2]) {
+		servo05 = 28 - servo05b;
+	} else if( ps3dat->button[PAD_KEY_L1] && !ps3dat->button[PAD_KEY_L2])	 {
+		servo05++;
+		servo05b = 0;
+	} else if(!ps3dat->button[PAD_KEY_L1] &&  ps3dat->button[PAD_KEY_L2])	 {
+		servo05--;
+		servo05b = +6;
+	};
+	setPCA9685Duty(fds , 5 , servo05);
+	
+
+	if(ps3dat->button[PAD_KEY_SQUARE]) {softPwmWrite(3,50);} else {softPwmWrite(3,0);};
+
+	if(ps3dat->button[PAD_KEY_TRIANGLE]) btn_tri++;
+	if(!ps3dat->button[PAD_KEY_TRIANGLE]) btn_tri = 0;
 	if(b_btn_tri > btn_tri) {mode++;if(mode > 3) mode = 0;};
 	b_btn_tri = btn_tri;
 	
-	if(ps3dat->button[PAD_KEY_CIRCLE]) {
-		btn_cir++;
-	};
-
-	if(!ps3dat->button[PAD_KEY_CIRCLE]) {
-		btn_cir = 0;
-	};
-	
+	if(ps3dat->button[PAD_KEY_CIRCLE]) btn_cir++;
+	if(!ps3dat->button[PAD_KEY_CIRCLE]) btn_cir = 0;
 	if(b_btn_cir > btn_cir) {
 		if(mode>=10) {mode++;if(mode>11) mode=10;};
 		if((0<=mode)&&(mode <10)) {mode = 10;};
 	};
 	b_btn_cir = btn_cir;
+
+	if(ps3dat->button[PAD_KEY_UP]) btn_up++;
+	if(!ps3dat->button[PAD_KEY_UP]) btn_up = 0;
+	if(b_btn_up > btn_up) {
+		a_mode++;if(a_mode > 12) a_mode = 0;
+		if(a_mode == 1) {softPwmWrite(3,50);delay(200);softPwmWrite(3,0);};
+		if(a_mode == 5) {softPwmWrite(3,50);delay(200);softPwmWrite(3,0);};
+		if(a_mode == 8) {softPwmWrite(3,50);delay(200);softPwmWrite(3,0);};
+	};
+	b_btn_up = btn_up;
+	
+	if(ps3dat->button[PAD_KEY_DOWN]) btn_down++;
+	if(!ps3dat->button[PAD_KEY_DOWN]) btn_down = 0;
+	if(b_btn_down > btn_down) {b_mode++;if(b_mode > 1) b_mode = 0;};
+	b_btn_down = btn_down;
+	
+	if( ps3dat->button[PAD_KEY_R1] ) servo04b++;
+	if( ps3dat->button[PAD_KEY_R2] ) servo04b--;
+	
+	if(b_mode == 1) {
+		servo06 = -128;
+	};
+	if(b_mode == 0) {
+		servo06 = -45;
+	};
+	
+	if(a_mode == 1) {
+		servo03 = 4;
+		servo04 = 41 - servo04b;
+	};
+	if(a_mode == 2) {
+		servo03 = 15;
+		servo04b = 0;
+	};
+	if(a_mode == 3) {
+		servo03 = 24;
+		servo04 = -17;
+		servo04b = 0;
+	};
+	if(a_mode == 4) {
+		servo03 = 35;
+		servo04 = 100;
+		servo04b = 0;
+	};
+	if(a_mode == 5) {
+		servo03 = 10;
+		servo04 = -60 - servo04b;
+	};
+	if(a_mode == 6) {
+		servo03 = 40;
+		servo04 = -17;
+		servo04b = 0;
+	};
+	if(a_mode == 7) {
+		servo04 = 130;
+		servo04b = 0;
+	};
+	if(a_mode == 8) {
+		servo03 = 10;
+		servo04 = -60 - servo04b;
+	};
+	if(a_mode == 9) {
+		servo03 = 20;
+		servo04 = 20;
+		servo04b = 0;
+	};
+	if(a_mode == 10) {
+		servo03 = 40;
+		servo04 = 130;
+		servo04b = 0;
+		a_mode = 0;
+	};
+	
+	setPCA9685Duty(fds , 3 , servo03);
+	setPCA9685Duty(fds , 4 , servo04);
+	setPCA9685Duty(fds , 5 , servo05);
+	setPCA9685Duty(fds , 6 , servo06);
+
 	
 	if(mode == 10) {
 		setPCA9685Duty(fds , 0 , +126);
@@ -392,6 +496,7 @@ void main() {
 	softPwmCreate(25,0,20); // motor-4 10ms
 	softPwmCreate(14,0,20); // motor-5 10ms // NC
 	softPwmCreate(23,0,20); // motor-5 10ms // NC
+	softPwmCreate(3,0,20); // beep
 
 	fds = wiringPiI2CSetup(0x40);	// PCA9685
 	resetPCA9685(fds);
