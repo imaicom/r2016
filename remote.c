@@ -211,10 +211,11 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 
 	if(ps3dat->button[PAD_KEY_SQUARE]) {softPwmWrite(3,50);} else {softPwmWrite(3,0);};
 
-	if(ps3dat->button[PAD_KEY_TRIANGLE]) btn_tri++;
-	if(!ps3dat->button[PAD_KEY_TRIANGLE]) btn_tri = 0;
-	if(b_btn_tri > btn_tri) {mode++;if(mode > 3) mode = 0;};
-	b_btn_tri = btn_tri;
+//	!! Danger !!
+//	if(ps3dat->button[PAD_KEY_TRIANGLE]) btn_tri++;
+//	if(!ps3dat->button[PAD_KEY_TRIANGLE]) btn_tri = 0;
+//	if(b_btn_tri > btn_tri) {mode++;if(mode > 3) mode = 0;};
+//	b_btn_tri = btn_tri;
 	
 	if(ps3dat->button[PAD_KEY_CIRCLE]) btn_cir++;
 	if(!ps3dat->button[PAD_KEY_CIRCLE]) btn_cir = 0;
