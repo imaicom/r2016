@@ -47,9 +47,9 @@ int servo00 = 0;
 int servo01 = 0;
 int servo02 = 0;
 
-int servo03 = 40;
+int servo03 = 75;
 int servo03b = 0;
-int servo04 = 130;
+int servo04 = 100;
 int servo04b = 0;
 int servo05 = 28;
 int servo05b = 0;
@@ -244,6 +244,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	
 	if( ps3dat->button[PAD_KEY_R1] ) servo04b++;
 	if( ps3dat->button[PAD_KEY_R2] ) servo04b--;
+	
 	if( ps3dat->button[PAD_KEY_LEFT] ) servo03b++;
 	if( ps3dat->button[PAD_KEY_RIGHT] ) servo03b--;
 	if( ps3dat->button[PAD_KEY_SELECT] ) servo03b = 0;
@@ -256,56 +257,61 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	};
 	
 	if(a_mode == 1) {
-		servo03 = -4;
-		servo04 = 41 - servo04b;
+		servo03 = -148;
+		servo04 = 33 - servo04b;
 	};
+
 	if(a_mode == 2) {
-		servo03 = 15;
+		servo03 = -130;
 		servo04b = 0;
 	};
 	if(a_mode == 3) {
-		servo03 = 24;
+		servo03 = 16;
 		servo04 = -17;
 		servo04b = 0;
 	};
 	if(a_mode == 4) {
-		servo03 = 35;
-		servo04 = 100;
+//		servo03 = 35;
+		servo04 = 60;
 		servo04b = 0;
 	};
 	if(a_mode == 5) {
-		servo03 = 10;
-		servo04 = -60 - servo04b;
+		servo03 = -140;
+		servo04 = -166 - servo04b;
 	};
 	if(a_mode == 6) {
-		servo03 = 40;
-		servo04 = -17;
+		servo03 = 16;
+		servo04 = -120;
 		servo04b = 0;
 	};
 	if(a_mode == 7) {
-		servo04 = 130;
+		servo04 = 100;
 		servo04b = 0;
 	};
-	if(a_mode == 8) {
-		servo03 = 10;
-		servo04 = -60 - servo04b;
+/*	if(a_mode == 8) {
+//		servo03 = 9;
+		servo04 = -18 - servo04b;
 	};
 	if(a_mode == 9) {
-		servo03 = 20;
+//		servo03 = 20;
 		servo04 = 20;
 		servo04b = 0;
 	};
 	if(a_mode == 10) {
-		servo03 = 40;
+//		servo03 = 40;
 		servo04 = 30;
 		servo04b = 0;
 	};
 	if(a_mode == 11) {
-		servo04 = 130;
+		for (i=30;i<=130;i++) {
+			servo04 = i;
+			setPCA9685Duty(fds , 4 , servo04);
+			delay(10);
+		};
 		servo04b = 0;
 		a_mode = 0;
 	};
-	
+*/
 	setPCA9685Duty(fds , 3 , servo03);
 	setPCA9685Duty(fds , 4 , servo04);
 	setPCA9685Duty(fds , 5 , servo05);
