@@ -257,12 +257,12 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	};
 	
 	if(a_mode == 1) {
-		servo03 = -148;
+		servo03 = -160;
 		servo04 = 33 - servo04b;
 	};
 
 	if(a_mode == 2) {
-		servo03 = -130;
+		servo03 = -100;
 		servo04b = 0;
 	};
 	if(a_mode == 3) {
@@ -271,28 +271,27 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		servo04b = 0;
 	};
 	if(a_mode == 4) {
-//		servo03 = 35;
-		servo04 = 60;
+		servo03 = 35;
+//		servo04 = 60;
 		servo04b = 0;
 	};
 	if(a_mode == 5) {
-		servo03 = -140;
+		servo03 = -150;
 		servo04 = -166 - servo04b;
 	};
 	if(a_mode == 6) {
-		servo03 = 16;
-		servo04 = -120;
+		servo03 = -40;
 		servo04b = 0;
 	};
 	if(a_mode == 7) {
-		servo04 = 100;
+		servo03 = -120;
+		servo04 = 5 - servo04b;
+	};
+	if(a_mode == 8) {
+		servo03 = 16;
 		servo04b = 0;
 	};
-/*	if(a_mode == 8) {
-//		servo03 = 9;
-		servo04 = -18 - servo04b;
-	};
-	if(a_mode == 9) {
+/*	if(a_mode == 9) {
 //		servo03 = 20;
 		servo04 = 20;
 		servo04b = 0;
