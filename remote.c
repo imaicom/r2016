@@ -369,15 +369,17 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		setPCA9685Duty(fds , 2 , +120);
 	};
 	if(mode == 1) {
-		setPCA9685Duty(fds , 0 , -70);
-		setPCA9685Duty(fds , 1 , -80);
-		setPCA9685Duty(fds , 2 , 0);
+
+		setPCA9685Duty(fds , 0 , -90);
+		setPCA9685Duty(fds , 1 , -70);
+		setPCA9685Duty(fds , 2 , 10); // 0
 		
 		softPwmWrite(28,0);
 		softPwmWrite(29,100);
 		softPwmWrite(24,0);
 		softPwmWrite(25,60);
-		delay(1300);
+		system("mpg123 /home/pi/Music/gundam_startup.mp3 &");
+		delay(1000);
 		softPwmWrite(28,0);
 		softPwmWrite(29,0);
 		delay(500);
@@ -386,7 +388,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(29,60);
 		softPwmWrite(24,0);
 		softPwmWrite(25,60);
-		delay(300);
+		delay(200);
 		softPwmWrite(28,0);
 		softPwmWrite(29,0);
 		delay(500);
