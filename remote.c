@@ -217,10 +217,11 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(ps3dat->button[PAD_KEY_SQUARE]) {softPwmWrite(3,50);} else {softPwmWrite(3,0);};
 
 //	!! Danger !!
-//	if(ps3dat->button[PAD_KEY_TRIANGLE]) btn_tri++;
-//	if(!ps3dat->button[PAD_KEY_TRIANGLE]) btn_tri = 0;
-//	if(b_btn_tri > btn_tri) {mode++;if(mode > 3) mode = 0;};
-//	b_btn_tri = btn_tri;
+	if(ps3dat->button[PAD_KEY_TRIANGLE]) btn_tri++;
+	if(!ps3dat->button[PAD_KEY_TRIANGLE]) btn_tri = 0;
+	if(b_btn_tri > btn_tri) {mode++;if(mode > 3) mode = 0;};
+	b_btn_tri = btn_tri;
+//	!! Danger !!
 	
 	if(ps3dat->button[PAD_KEY_CIRCLE]) btn_cir++;
 	if(!ps3dat->button[PAD_KEY_CIRCLE]) btn_cir = 0;
@@ -234,9 +235,20 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(!ps3dat->button[PAD_KEY_UP]) btn_up = 0;
 	if(b_btn_up > btn_up) {
 		a_mode++;if(a_mode > 15) a_mode = 0;
-		if(a_mode == 1) {softPwmWrite(3,50);delay(200);softPwmWrite(3,0);};
-		if(a_mode == 5) {softPwmWrite(3,50);delay(200);softPwmWrite(3,0);};
-		if(a_mode == 8) {softPwmWrite(3,50);delay(200);softPwmWrite(3,0);};
+		//if(a_mode == 1) {softPwmWrite(3,50);delay(200);softPwmWrite(3,0);};
+		//if(a_mode == 5) {softPwmWrite(3,50);delay(200);softPwmWrite(3,0);};
+		//if(a_mode == 8) {softPwmWrite(3,50);delay(200);softPwmWrite(3,0);};
+		if(a_mode == 0) system("mpg123 /home/pi/Music/arm-action1.mp3 &");
+		if(a_mode == 1) system("mpg123 /home/pi/Music/01.mp3 &");
+		if(a_mode == 2) system("mpg123 /home/pi/Music/02.mp3 &");
+		if(a_mode == 3) system("mpg123 /home/pi/Music/03.mp3 &");
+		if(a_mode == 4) system("mpg123 /home/pi/Music/04.mp3 &");
+		if(a_mode == 5) system("mpg123 /home/pi/Music/05.mp3 &");
+		if(a_mode == 6) system("mpg123 /home/pi/Music/06.mp3 &");
+		if(a_mode == 7) system("mpg123 /home/pi/Music/07.mp3 &");
+		if(a_mode == 8) system("mpg123 /home/pi/Music/08.mp3 &");
+		if(a_mode == 9) system("mpg123 /home/pi/Music/09.mp3 &");
+		if(a_mode == 10) system("mpg123 /home/pi/Music/10.mp3 &");
 	};
 	b_btn_up = btn_up;
 
@@ -245,6 +257,17 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(b_btn_down > btn_down) {
 		a_mode--;if(a_mode < 0) a_mode = 14;
 		if (a_mode == 9) a_mode = 8;
+		if(a_mode == 0) system("mpg123 /home/pi/Music/arm-action1.mp3 &");
+		if(a_mode == 1) system("mpg123 /home/pi/Music/01.mp3 &");
+		if(a_mode == 2) system("mpg123 /home/pi/Music/02.mp3 &");
+		if(a_mode == 3) system("mpg123 /home/pi/Music/03.mp3 &");
+		if(a_mode == 4) system("mpg123 /home/pi/Music/04.mp3 &");
+		if(a_mode == 5) system("mpg123 /home/pi/Music/05.mp3 &");
+		if(a_mode == 6) system("mpg123 /home/pi/Music/06.mp3 &");
+		if(a_mode == 7) system("mpg123 /home/pi/Music/07.mp3 &");
+		if(a_mode == 8) system("mpg123 /home/pi/Music/08.mp3 &");
+		if(a_mode == 9) system("mpg123 /home/pi/Music/09.mp3 &");
+		if(a_mode == 10) system("mpg123 /home/pi/Music/10.mp3 &");
 	};
 	b_btn_down = btn_down;
 	
