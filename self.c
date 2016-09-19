@@ -13,6 +13,22 @@
 #include "controller.h"
 #include <math.h>
 
+int write_file(char fnp[256],long int d) {
+	
+	FILE *fp;
+	char fn[256]="/tmp/";
+
+	strcat(fn,fnp);
+	strcat(fn,".txt");
+	
+	if((fp=fopen(fn,"r+"))==NULL) {
+		fp=fopen(fn,"w+");
+	};
+	
+	fprintf(fp,"%8d",d);
+	fclose(fp);
+}
+
 struct ps3ctls {
 	
 	int fd;
@@ -290,7 +306,8 @@ void main() {
 	
 	pinMode(4,OUTPUT);digitalWrite(4,0);
 	pinMode(7,OUTPUT);digitalWrite(7,0);
-	
+	write_file("bar" ,0 );
+
 //	while(1) {
 		if(!(ps3c_init(&ps3dat, df))) {
 

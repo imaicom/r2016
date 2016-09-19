@@ -14,7 +14,7 @@ long int cntWheel = 0;
 unsigned int timBar;
 long int Bar = 0;
 
-int check_port(char fnp[256],long int d) {
+int write_file(char fnp[256],long int d) {
 	
 	FILE *fp;
 	char fn[256]="/tmp/";
@@ -47,7 +47,7 @@ void main() {
 	pinMode(15,INPUT);pullUpDnControl(15,PUD_UP); // ball
 	pinMode( 5,INPUT);pullUpDnControl( 5,PUD_UP); // kill sw(red)
 	pinMode( 6,INPUT);pullUpDnControl( 6,PUD_UP); // start sw(white)
-//	system("sudo /home/pi/robot/self &");
+	system("sudo /home/pi/robot/self &");
 	
 	while(1) {
 		
@@ -87,12 +87,12 @@ void main() {
 			system(s);
 		};
 
-		check_port("program-sw"	,digitalRead( 3) );
-		check_port("cntWheel"		,cntWheel );
-		check_port("bar"			,Bar );
-		check_port("ball"			,digitalRead(15) );
-		check_port("kill-sw"		,digitalRead(5) );
-		check_port("start-sw"		,digitalRead(6) );
+		write_file("program-sw"	,digitalRead( 3) );
+		write_file("cntWheel"		,cntWheel );
+		write_file("bar"			,Bar );
+		write_file("ball"			,digitalRead(15) );
+		write_file("kill-sw"		,digitalRead(5) );
+		write_file("start-sw"		,digitalRead(6) );
 		
 //		if(!(digitalRead( 5))) {system("sudo shutdown -h now &");};
 		
