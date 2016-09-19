@@ -32,14 +32,13 @@ int check_port(char fnp[256],long int d) {
 
 void main() {
 	
+	char t[256];
 	char s[256];
 	int tmp;
 	
 	wiringPiSetup();
 	pinMode( 3,INPUT);pullUpDnControl( 3,PUD_UP);	// program-sw
 	pinMode(12,INPUT);pullUpDnControl(12,PUD_UP); // cntWheel
-//	pinMode(13,INPUT);pullUpDnControl(13,PUD_UP); // gnd-sensor1
-//	pinMode(14,INPUT);pullUpDnControl(14,PUD_UP); // gnd-sensor2
 	pinMode(21,INPUT);pullUpDnControl(21,PUD_UP); // gnd-sensor1
 	pinMode(22,INPUT);pullUpDnControl(22,PUD_UP); // gnd-sensor2
 	pinMode(30,INPUT);pullUpDnControl(30,PUD_UP); // gnd-sensor center
@@ -48,7 +47,7 @@ void main() {
 	pinMode(15,INPUT);pullUpDnControl(15,PUD_UP); // ball
 	pinMode( 5,INPUT);pullUpDnControl( 5,PUD_UP); // kill sw(red)
 	pinMode( 6,INPUT);pullUpDnControl( 6,PUD_UP); // start sw(white)
-	system("sudo /home/pi/robot/self &");
+//	system("sudo /home/pi/robot/self &");
 	
 	while(1) {
 		
@@ -75,10 +74,17 @@ void main() {
 //			Bar++;
 //		};
 
-		if(digitalRead(30)==1) tmp = 1; else tmp = 0;
+		if(digitalRead(30)) tmp = 0; else tmp = 1;
 		if(timBar != tmp) {
-			if(digitalRead(30)==1) timBar = 1; else timBar = 0;
+			if(digitalRead(30)) timBar = 0; else timBar = 1;
 			Bar++;
+			sprintf(t,"%02d",Bar);
+			printf("%s",t);
+			strcpy(s,"mpg123 /home/pi/Music/");
+			strcat(s,t);
+			strcat(s,".mp3 &");
+			printf("%s\n",s);
+			system(s);
 		};
 
 		check_port("program-sw"	,digitalRead( 3) );
