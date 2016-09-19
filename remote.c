@@ -306,7 +306,6 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	
 	if(mode == 0) {
 		setPCA9685Duty(fds , 0 ,  0);
-		setPCA9685Duty(fds , 0 ,  0);
 		setPCA9685Duty(fds , 1 , 10);
 	};
 	if(mode == 1) {
