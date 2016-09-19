@@ -56,24 +56,6 @@ void main() {
 			cntWheel++;
 		};
 		
-//		if(digitalRead(13)+digitalRead(14)>0) tmp = 1; else tmp = 0;
-//		if(timBar != tmp) {
-//			if(digitalRead(13)+digitalRead(14)>0) timBar = 1; else timBar = 0;
-//			Bar++;
-//		};
-		
-//		if(digitalRead(21)+digitalRead(22)+digitalRead(23)+digitalRead(24)==4) tmp = 1; else tmp = 0;
-//		if(timBar != tmp) {
-//			if(digitalRead(21)+digitalRead(22)+digitalRead(23)+digitalRead(24)==4) timBar = 1; else timBar = 0;
-//			Bar++;
-//		};
-
-//		if(digitalRead(22)+digitalRead(23)==2) tmp = 1; else tmp = 0;
-//		if(timBar != tmp) {
-//			if(digitalRead(22)+digitalRead(23)==2) timBar = 1; else timBar = 0;
-//			Bar++;
-//		};
-
 		if(digitalRead(30)) tmp = 0; else tmp = 1;
 		if(timBar != tmp) {
 			if(digitalRead(30)) timBar = 0; else timBar = 1;
