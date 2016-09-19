@@ -51,8 +51,8 @@ int servo02 = 0;
 
 int servo03 = 35;
 int servo03b = 0;
-int servo04 = 33;//100
-int servo04b = 0;
+int servo04 = 33;
+int servo04b = 100;//0
 int servo05 = 28;
 int servo05b = 0;
 int servo06 = -45;
@@ -272,63 +272,30 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(b_btn_select > btn_select) {b_mode++;if(b_mode > 1) b_mode = 0;};
 	b_btn_select = btn_select;
 	
-	if( ps3dat->button[PAD_KEY_R1] ) servo04b++;
-	if( ps3dat->button[PAD_KEY_R2] ) servo04b--;
+	if( ps3dat->button[PAD_KEY_R1] ) {servo04b++;if(servo04b > 200) servo04b = 200;};
+	if( ps3dat->button[PAD_KEY_R2] ) {servo04b--;if(servo04b < 70) servo04b = 70;};
 	
 	if( ps3dat->button[PAD_KEY_LEFT] ) servo03b++;
 	if( ps3dat->button[PAD_KEY_RIGHT] ) servo03b--;
 	if( ps3dat->button[PAD_KEY_SELECT] ) servo03b = 0;
 	
-	if(b_mode == 1) {
-		servo06 = -128;
-	};
-	if(b_mode == 0) {
-		servo06 = -45;
-	};
+	if(b_mode == 1) servo06 = -128;
+	if(b_mode == 0) servo06 = -45;
 	
-	if(a_mode == 0) {
-		servo03 = 35;
-		servo04 = 33 - servo04b;
-	};
-	if(a_mode == 1) {
-		servo03 = -150;
-		servo04 = 33 - servo04b;
-	};
-	if(a_mode == 2) {
-		servo03 = -100;
-		servo04 = 33 - servo04b;
-	};
-	if(a_mode == 3) {
-		servo03 = 35;
-		servo04 = 33 - servo04b;
-	};
-	if(a_mode == 4) {
-		servo03 = -150;
-		servo04 = 33 - servo04b;
-	};
-	if(a_mode == 5) {
-		servo03 = -90;
-		servo04 = 33 - servo04b;
-	};
-	if(a_mode == 6) {
-		servo03 = -90;
-		servo04 = 33 - servo04b;
-	};
-	if(a_mode == 7) {
-		servo03 = -70;
-		servo04 = 33 - servo04b;
-	};
-	if(a_mode == 8) {
-		servo03 = 35;
-		servo04 = 33 - servo04b;
-	};
-	if(a_mode == 9) {
-		servo04 = 33 - servo04b;
-		a_mode = 10;
-	};
-	if(a_mode == 10) {
-	};
+	if(a_mode == 0) servo03 = 35;
+	if(a_mode == 1) servo03 = -150;
+	if(a_mode == 2) servo03 = -100;
+	if(a_mode == 3) servo03 = 35;
+	if(a_mode == 4) servo03 = -150;
+	if(a_mode == 5) servo03 = -90;
+	if(a_mode == 6) servo03 = -90;
+	if(a_mode == 7) servo03 = -70;
+	if(a_mode == 8) servo03 = 35;
+	if(a_mode == 9) a_mode = 10;
+	if(a_mode == 10) {};
 	
+	servo04 = 33 - servo04b;
+
 	setPCA9685Duty(fds , 3 , servo03);
 	setPCA9685Duty(fds , 4 , servo04);
 	setPCA9685Duty(fds , 5 , servo05);
@@ -408,6 +375,22 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		mode = 0;
 	};
 
+	if(ps3dat->button[PAD_KEY_CROSS] && ps3dat->button[PAD_KEY_SQUARE]) {
+		system("mpg123 /home/pi/Music/shuu.mp3 &");
+		softPwmWrite(5,0);
+		softPwmWrite(6,0);
+		softPwmWrite(26,0);
+		softPwmWrite(27,0);
+		softPwmWrite(28,0);
+		softPwmWrite(29,0);
+		softPwmWrite(24,0);
+		softPwmWrite(25,0);
+		softPwmWrite(14,0);
+		softPwmWrite(23,0);
+		softPwmWrite(3,0);
+		delay(3000);
+		return -1; // end of program
+	};
 
 	return 0;
 }
