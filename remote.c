@@ -23,14 +23,14 @@ struct ps3ctls {
 };
 
 int fds;
-#define saki3o 47
-#define saki4o 52
-#define saki5o 3
-int saki1  = 0;
-int saki2  = 0;
-int saki3  = saki3o;
-int saki4  = saki4o;
-int saki5  = saki5o;
+//#define saki3o 47
+//#define saki4o 52
+//#define saki5o 3
+//int saki1  = 0;
+//int saki2  = 0;
+//int saki3  = saki3o;
+//int saki4  = saki4o;
+//int saki5  = saki5o;
 int mode = 10;
 int btn_tri = 0;
 int b_btn_tri = 0;
