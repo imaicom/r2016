@@ -30,6 +30,22 @@ int write_file(char fnp[256],long int d) {
 	fclose(fp);
 }
 
+int check_file(char fnp[256]) {
+	
+	FILE *fp;
+	char fn[256]="/tmp/";
+	long int d;
+
+	strcat(fn,fnp);
+	strcat(fn,".txt");
+	
+	if((fp=fopen(fn,"r"))!=NULL) {
+		fscanf(fp,"%8d",&d);
+		fclose(fp);
+	} else d=0;
+	return d;
+}
+
 void main() {
 	
 	char t[256];
@@ -49,17 +65,24 @@ void main() {
 	pinMode( 6,INPUT);pullUpDnControl( 6,PUD_UP); // start sw(white)
 	system("sudo /home/pi/robot/self &");
 	
+	write_file("cntWheel"		,0 );
+	write_file("bar"		,0 );
+	
 	while(1) {
 		
 		if (timWheel != digitalRead(12)) {
 			timWheel = digitalRead(12);
+			cntWheel = check_file("cntWheel");
 			cntWheel++;
+			write_file("cntWheel"		,cntWheel );
 		};
 		
 		if(digitalRead(30)) tmp = 0; else tmp = 1;
 		if(timBar != tmp) {
 			if(digitalRead(30)) timBar = 0; else timBar = 1;
+			Bar = check_file("bar");
 			Bar++;
+			write_file("bar"			,Bar );
 			sprintf(t,"%02d",Bar);
 			printf("%s",t);
 			strcpy(s,"mpg123 /home/pi/Music/");
@@ -70,11 +93,10 @@ void main() {
 		};
 
 		write_file("program-sw"	,digitalRead( 3) );
-		write_file("cntWheel"		,cntWheel );
-		write_file("bar"			,Bar );
 		write_file("ball"			,digitalRead(15) );
 		write_file("kill-sw"		,digitalRead(5) );
 		write_file("start-sw"		,digitalRead(6) );
+		
 		
 //		if(!(digitalRead( 5))) {system("sudo shutdown -h now &");};
 		
