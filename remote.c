@@ -23,14 +23,6 @@ struct ps3ctls {
 };
 
 int fds;
-//#define saki3o 47
-//#define saki4o 52
-//#define saki5o 3
-//int saki1  = 0;
-//int saki2  = 0;
-//int saki3  = saki3o;
-//int saki4  = saki4o;
-//int saki5  = saki5o;
 int mode = 10;
 int btn_tri = 0;
 int b_btn_tri = 0;
@@ -44,6 +36,12 @@ int btn_down = 0;
 int b_btn_down = 0;
 int btn_select = 0;
 int b_btn_select = 0;
+
+int btn_r1 = 0;
+int b_btn_r1 = 0;
+int btn_r2 = 0;
+int b_btn_r2 = 0;
+
 int a_mode = 0;
 int b_mode = 0;
 
@@ -54,7 +52,7 @@ int servo02 = 0;
 int servo03 = 35;
 int servo03b = 0;
 int servo04 = 33;
-int servo04b = 100;//0
+int servo04b = 100;
 int servo05 = 28;
 int servo05b = 0;
 int servo06 = -45;
@@ -109,7 +107,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 //	printf(" 5=%4d ",ps3dat->stick [PAD_LEFT_X]);
 //	printf(" 6=%4d ",ps3dat->stick [PAD_LEFT_Y]);
 //	printf(" 7=%4d ",ps3dat->stick [PAD_RIGHT_X]);
-	system("clear");
+//	system("clear");
 	printf(" 03=%4d ",servo03);
 	printf(" 03b=%4d ",servo03b);
 	printf(" 04=%4d ",servo04);
@@ -281,18 +279,20 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(b_btn_select > btn_select) {b_mode++;if(b_mode > 1) b_mode = 0;};
 	b_btn_select = btn_select;
 	
+//	if(ps3dat->button[PAD_KEY_R1]) btn_r1++;
+//	if(!ps3dat->button[PAD_KEY_R1]) btn_r1 = 0;
+//	if(b_btn_r1 > btn_r1) {softPwmWrite(3,50);delay(100);softPwmWrite(3,0);};
+//	b_btn_r1 = btn_r1;
 	
+//	if(ps3dat->button[PAD_KEY_R2]) btn_r2++;
+//	if(!ps3dat->button[PAD_KEY_R2]) btn_r2 = 0;
+//	if(b_btn_r2 > btn_r2) {softPwmWrite(3,50);delay(100);softPwmWrite(3,0);};
+//	b_btn_r2 = btn_r2;
+
 	
-	if( ps3dat->stick [PAD_R1] > 10 ) {servo04b++;if(servo04b >= 190) servo04b = 190;};//200
-	if( ps3dat->stick [PAD_R2] > 10 ) {servo04b--;if(servo04b <= 50) servo04b = 50;};
-//	if( ps3dat->button[PAD_KEY_R1] ) {servo04b++;if(servo04b >= 190) {servo04b = 190;softPwmWrite(3,50);delay(100);softPwmWrite(3,0);};};//200
-//	if( ps3dat->button[PAD_KEY_R2] ) {servo04b--;if(servo04b <= 50) {servo04b = 50;softPwmWrite(3,50);delay(100);softPwmWrite(3,0);};};
-//	if( ps3dat->button[PAD_KEY_R1] ) {servo04b++;if(servo04b >= 190) {servo04b = 190;};};//200
-//	if( ps3dat->button[PAD_KEY_R2] ) {servo04b--;if(servo04b <= 50) {servo04b = 50;};};
-	
-//	if( ps3dat->button[PAD_KEY_LEFT] ) servo03b++;
-//	if( ps3dat->button[PAD_KEY_RIGHT] ) servo03b--;
-//	if( ps3dat->button[PAD_KEY_SELECT] ) servo03b = 0;
+	if( ps3dat->stick [PAD_R1] > 5 ) {servo04b++;if(servo04b >= 190) servo04b = 190;};//200
+	if( ps3dat->stick [PAD_R2] > 5 ) {servo04b--;if(servo04b <= 20) servo04b = 20;};
+
 	
 	if(b_mode == 1) servo06 = -128;
 	if(b_mode == 0) servo06 = -45;
