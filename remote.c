@@ -281,12 +281,18 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(b_btn_select > btn_select) {b_mode++;if(b_mode > 1) b_mode = 0;};
 	b_btn_select = btn_select;
 	
-	if( ps3dat->button[PAD_KEY_R1] ) {servo04b++;if(servo04b > 240) servo04b = 240;};//200
-	if( ps3dat->button[PAD_KEY_R2] ) {servo04b--;if(servo04b < 70) servo04b = 70;};
 	
-	if( ps3dat->button[PAD_KEY_LEFT] ) servo03b++;
-	if( ps3dat->button[PAD_KEY_RIGHT] ) servo03b--;
-	if( ps3dat->button[PAD_KEY_SELECT] ) servo03b = 0;
+	
+	if( ps3dat->stick [PAD_R1] > 10 ) {servo04b++;if(servo04b >= 190) servo04b = 190;};//200
+	if( ps3dat->stick [PAD_R2] > 10 ) {servo04b--;if(servo04b <= 50) servo04b = 50;};
+//	if( ps3dat->button[PAD_KEY_R1] ) {servo04b++;if(servo04b >= 190) {servo04b = 190;softPwmWrite(3,50);delay(100);softPwmWrite(3,0);};};//200
+//	if( ps3dat->button[PAD_KEY_R2] ) {servo04b--;if(servo04b <= 50) {servo04b = 50;softPwmWrite(3,50);delay(100);softPwmWrite(3,0);};};
+//	if( ps3dat->button[PAD_KEY_R1] ) {servo04b++;if(servo04b >= 190) {servo04b = 190;};};//200
+//	if( ps3dat->button[PAD_KEY_R2] ) {servo04b--;if(servo04b <= 50) {servo04b = 50;};};
+	
+//	if( ps3dat->button[PAD_KEY_LEFT] ) servo03b++;
+//	if( ps3dat->button[PAD_KEY_RIGHT] ) servo03b--;
+//	if( ps3dat->button[PAD_KEY_SELECT] ) servo03b = 0;
 	
 	if(b_mode == 1) servo06 = -128;
 	if(b_mode == 0) servo06 = -45;
