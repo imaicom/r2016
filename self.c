@@ -453,7 +453,7 @@ void main() {
 					softPwmWrite(16, 90);softPwmWrite( 1, 0);
 					softPwmWrite(28,100);softPwmWrite(29, 0);
 
-					if(check_file("bar") > 34) { //34
+					if(check_file("bar") > 34) { //36
 						printf("%d\n",check_file("bar"));
 						softPwmWrite(16, 0);softPwmWrite( 1, 0);
 						softPwmWrite(28, 0);softPwmWrite(29, 0);
@@ -470,7 +470,7 @@ void main() {
 					softPwmWrite(16, 90);softPwmWrite( 1, 0);
 					softPwmWrite(28,100);softPwmWrite(29, 0);
 				
-					if(check_file("cntWheel") > 6) { // 4
+					if(check_file("cntWheel") > 5) { // 4
 						printf("%d\n",check_file("cntWheel"));
 						bmeter = 7;
 					};	
