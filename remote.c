@@ -36,6 +36,8 @@ int btn_tri = 0;
 int b_btn_tri = 0;
 int btn_cir = 0;
 int b_btn_cir = 0;
+int btn_squ = 0;
+int b_btn_squ = 0;
 int btn_up = 0;
 int b_btn_up = 0;
 int btn_down = 0;
@@ -107,13 +109,16 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 //	printf(" 5=%4d ",ps3dat->stick [PAD_LEFT_X]);
 //	printf(" 6=%4d ",ps3dat->stick [PAD_LEFT_Y]);
 //	printf(" 7=%4d ",ps3dat->stick [PAD_RIGHT_X]);
+	system("clear");
 	printf(" 03=%4d ",servo03);
 	printf(" 03b=%4d ",servo03b);
 	printf(" 04=%4d ",servo04);
 	printf(" 04b=%4d ",servo04b);
+	printf("\n"); 
 	printf(" 05=%4d ",servo05);
 	printf(" 05b=%4d ",servo05b);
 	printf(" 06=%4d ",servo06);
+	printf("\n"); 
 	printf(" mode=%2d ",mode);
 	printf(" a_mode=%2d ",a_mode);
 	printf(" b_mode=%2d ",b_mode);
@@ -151,7 +156,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	};
 
 	
-	z = ps3dat->stick [PAD_RIGHT_X];
+	z = ps3dat->stick [PAD_RIGHT_Y];
 
 	if(abs(z) < 5) {
 		softPwmWrite(28,0);
@@ -215,22 +220,24 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	setPCA9685Duty(fds , 5 , servo05);
 	
 
-	if(ps3dat->button[PAD_KEY_SQUARE]) {softPwmWrite(3,50);} else {softPwmWrite(3,0);};
+//	if(ps3dat->button[PAD_KEY_SQUARE]) {softPwmWrite(3,50);} else {softPwmWrite(3,0);}; //beep
 
 	if(ps3dat->button[PAD_KEY_TRIANGLE]) btn_tri++;
 	if(!ps3dat->button[PAD_KEY_TRIANGLE]) btn_tri = 0;
 	if(b_btn_tri > btn_tri) {mode++;if(mode > 8) mode = 0;};
 	b_btn_tri = btn_tri;
 	
-//	if(ps3dat->button[PAD_KEY_CIRCLE]) btn_cir++;
-//	if(!ps3dat->button[PAD_KEY_CIRCLE]) btn_cir = 0;
-//	if(b_btn_cir > btn_cir) {
-//		if(mode>=10) {mode++;if(mode>11) mode=10;};
-//		if((0<=mode)&&(mode <10)) {mode = 10;};
-//	};
-//	b_btn_cir = btn_cir;
+	if(ps3dat->button[PAD_KEY_SQUARE]) btn_squ++;
+	if(!ps3dat->button[PAD_KEY_SQUARE]) btn_squ = 0;
+	if(b_btn_squ > btn_squ) {
+		if(mode<20) {mode = 100;} else {mode++;if(mode >110) mode=2;}
+	};
+	b_btn_squ = btn_squ;
 
-	if(ps3dat->button[PAD_KEY_CIRCLE]) mode = 7;
+	if(ps3dat->button[PAD_KEY_CIRCLE]) btn_cir++;
+	if(!ps3dat->button[PAD_KEY_CIRCLE]) btn_cir = 0;
+	if(b_btn_cir > btn_cir) mode = 7;
+	b_btn_cir = btn_cir;
 
 	if(ps3dat->button[PAD_KEY_UP]) btn_up++;
 	if(!ps3dat->button[PAD_KEY_UP]) btn_up = 0;
@@ -274,7 +281,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(b_btn_select > btn_select) {b_mode++;if(b_mode > 1) b_mode = 0;};
 	b_btn_select = btn_select;
 	
-	if( ps3dat->button[PAD_KEY_R1] ) {servo04b++;if(servo04b > 200) servo04b = 200;};
+	if( ps3dat->button[PAD_KEY_R1] ) {servo04b++;if(servo04b > 240) servo04b = 240;};//200
 	if( ps3dat->button[PAD_KEY_R2] ) {servo04b--;if(servo04b < 70) servo04b = 70;};
 	
 	if( ps3dat->button[PAD_KEY_LEFT] ) servo03b++;
@@ -285,7 +292,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(b_mode == 0) servo06 = -45;
 	
 	if(a_mode == 0) servo03 = 35;
-	if(a_mode == 1) servo03 = -150;
+	if(a_mode == 1) servo03 = -155;
 	if(a_mode == 2) servo03 = -100;
 	if(a_mode == 3) servo03 = 35;
 	if(a_mode == 4) servo03 = -150;
@@ -304,12 +311,34 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	setPCA9685Duty(fds , 6 , servo06);
 
 	
+	if(mode == 100) {
+		setPCA9685Duty(fds , 1 , -20);//-90
+		//setPCA9685Duty(fds , 0 , -90);
+		
+		mode = 101;
+	};
+	if(mode == 101) {
+	};
+	if(mode == 102) {
+		//setPCA9685Duty(fds , 1 , -90);//-90
+		setPCA9685Duty(fds , 0 , -90);
+		
+		mode = 103;
+	};
+	if(mode == 103) {
+	};
+	if(mode == 104) {
+		setPCA9685Duty(fds , 0 , -90);
+		//setPCA9685Duty(fds , 1 , -90);//-90
+		//setPCA9685Duty(fds , 0 , -90);
+		
+		mode = 2;
+	};
 	if(mode == 0) {
 		setPCA9685Duty(fds , 0 ,  0);
 		setPCA9685Duty(fds , 1 , 10);
 	};
 	if(mode == 1) {
-
 		setPCA9685Duty(fds , 0 , -90);
 		setPCA9685Duty(fds , 1 , -90);
 		
@@ -363,11 +392,14 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 
 	if(mode == 6) {};
 	if(mode == 7) {
+		system("mpg123 /home/pi/Music/arm-action2.mp3 &");
 		setPCA9685Duty(fds , 0 , +126);
 		setPCA9685Duty(fds , 1 , +110);
 		setPCA9685Duty(fds , 2 , +120);
+		mode = 8;
 	};
-	if(mode == 8) {
+	if(mode == 8) {};
+	if(mode == 9) {
 		for (i=0;i<126;i++) {
 			setPCA9685Duty(fds , 0 , 126-i);
 			setPCA9685Duty(fds , 1 , 110-i);
@@ -376,7 +408,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		mode = 0;
 	};
 
-	if(ps3dat->button[PAD_KEY_CROSS] && ps3dat->button[PAD_KEY_SQUARE]) {
+	if(ps3dat->button[PAD_KEY_START]) {
 		system("mpg123 /home/pi/Music/shuu.mp3 &");
 		softPwmWrite(5,0);
 		softPwmWrite(6,0);
