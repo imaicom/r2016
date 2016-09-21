@@ -356,8 +356,15 @@ void main() {
 //			sprintf(lcd_buff , " %8d",check_file("cntWheel"));
 //			put_LCDstring(lcd_buff);
 
-
+//			bmeter = 2; // imai
+			
 			while(1) {
+				
+				if(!digitalRead( 5)) {
+					softPwmWrite(16, 0);softPwmWrite( 1, 0);
+					softPwmWrite(28, 0);softPwmWrite(29, 0);
+					bmeter = 0;
+				};
 				
 				if(digitalRead( 3)) {
 					digitalWrite(4,1);
@@ -392,7 +399,7 @@ void main() {
 				};
 				
 				if(bmeter == 1) {
-					softPwmWrite(16, 90);softPwmWrite( 1, 0);
+					softPwmWrite(16,100);softPwmWrite( 1, 0);
 					softPwmWrite(28,100);softPwmWrite(29, 0);
 					if(check_file("bar") > 24) {
 						printf("%d\n",check_file("bar"));
@@ -405,25 +412,57 @@ void main() {
 					softPwmWrite(28, 0);softPwmWrite(29, 0);
 					sleep(1);
 				
-					if(digitalRead(24)) {
-						softPwmWrite(16,8);softPwmWrite( 1, 0);//while(!digitalRead(21));
-					} else {
-						softPwmWrite(28,8);softPwmWrite(29, 0);//while(!digitalRead(24));
+					printf(" %4d , %4d , %4d , %4d \n",digitalRead(21),digitalRead(22),digitalRead(23),digitalRead(24));
+//					if(1) {
+//						softPwmWrite(16,8);softPwmWrite( 1, 0);//while(!digitalRead(21));
+//					} else {
+//						softPwmWrite(28,8);softPwmWrite(29, 0);//while(!digitalRead(24));
+//					};
+//					sleep(1);
+
+
+					while(digitalRead(21)+digitalRead(22)+digitalRead(23)+digitalRead(24)!=0) {
+						softPwmWrite(16,8);softPwmWrite( 1, 0);
+						softPwmWrite(28,8);softPwmWrite(29, 0);
 					};
-					sleep(1);
 				
 					softPwmWrite(16, 0);softPwmWrite( 1, 0);
 					softPwmWrite(28, 0);softPwmWrite(29, 0);
 					sleep(1);
 					
+					while(!(digitalRead(21)+digitalRead(24)!=0)) {
+						softPwmWrite(16,8);softPwmWrite( 1, 0);
+						softPwmWrite(28,8);softPwmWrite(29, 0);
+					};
+
+					softPwmWrite(16, 0);softPwmWrite( 1, 0);
+					softPwmWrite(28, 0);softPwmWrite(29, 0);
+					sleep(1);
+					
+					printf(" %4d , %4d , %4d , %4d \n",digitalRead(21),digitalRead(22),digitalRead(23),digitalRead(24));
+
+					if(digitalRead(21)+digitalRead(24)==2) {
+						softPwmWrite(16,8);softPwmWrite( 1, 0);
+						softPwmWrite(28,8);softPwmWrite(29, 0);
+					} else if(digitalRead(21)) {
+						softPwmWrite(28,8);softPwmWrite(29, 0);
+					} else if (digitalRead(24)){
+						softPwmWrite(16,8);softPwmWrite( 1, 0);
+					};
+					sleep(1);
+		
+					softPwmWrite(16, 0);softPwmWrite( 1, 0);
+					softPwmWrite(28, 0);softPwmWrite(29, 0);
+					sleep(1);
+							
 					write_file("cntWheel"		,0 );
 					write_file("bar"			,0 );
 					
-					bmeter = 3;
+					bmeter = 3;// 0 
 				};
 				
 				if(bmeter == 3) {
-					softPwmWrite(16, 90);softPwmWrite( 1, 0);
+					softPwmWrite(16,100);softPwmWrite( 1, 0);
 					softPwmWrite(28,100);softPwmWrite(29, 0);
 					
 					bmeter = 4;
@@ -450,7 +489,7 @@ void main() {
 				};
 				
 				if(bmeter == 5) {
-					softPwmWrite(16, 90);softPwmWrite( 1, 0);
+					softPwmWrite(16,100);softPwmWrite( 1, 0);
 					softPwmWrite(28,100);softPwmWrite(29, 0);
 
 					if(check_file("bar") > 34) { //36
@@ -467,7 +506,7 @@ void main() {
 				};
 				
 				if(bmeter == 6) {
-					softPwmWrite(16, 90);softPwmWrite( 1, 0);
+					softPwmWrite(16,100);softPwmWrite( 1, 0);
 					softPwmWrite(28,100);softPwmWrite(29, 0);
 				
 					if(check_file("cntWheel") > 5) { // 4
