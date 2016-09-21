@@ -53,7 +53,7 @@ int servo03 = 35;
 int servo03b = 0;
 int servo04 = 33;
 int servo04b = 100;
-int servo05 = 28;
+int servo05 = 84; // 999
 int servo05b = 0;
 int servo06 = -45;
 
@@ -205,14 +205,14 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 //	setPCA9685Duty(fds , 6 , servo06);
 	
 	if(!ps3dat->button[PAD_KEY_L1] && !ps3dat->button[PAD_KEY_L2]) {
-		servo05 = 28 - servo05b;
+		servo05 = 84 - servo05b; // 999
 		
 	} else if( ps3dat->button[PAD_KEY_L1] && !ps3dat->button[PAD_KEY_L2])	 {
-		servo05++; if(servo05 > +100) servo05 = +100;
+		servo05++; if(servo05 > +120) servo05 = +120;
 		servo05b = 0;
 	} else if(!ps3dat->button[PAD_KEY_L1] &&  ps3dat->button[PAD_KEY_L2])	 {
-		servo05--; if(servo05 < -100) servo05 = -100;
-		servo05b = +10;//6 old hold power
+		servo05--; if(servo05 < -80) servo05 = -80;
+		servo05b = +8;//6 old hold power
 		b_mode = 0;
 	};
 	setPCA9685Duty(fds , 5 , servo05);
@@ -314,6 +314,9 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	setPCA9685Duty(fds , 3 , servo03);
 	setPCA9685Duty(fds , 4 , servo04);
 	setPCA9685Duty(fds , 5 , servo05);
+//	setPCA9685Duty(fds , 5 , ps3dat->stick [PAD_RIGHT_X]);
+//	printf("XX %4d XX",ps3dat->stick [PAD_RIGHT_X]);
+
 	setPCA9685Duty(fds , 6 , servo06);
 
 	
