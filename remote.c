@@ -240,7 +240,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(ps3dat->button[PAD_KEY_UP]) btn_up++;
 	if(!ps3dat->button[PAD_KEY_UP]) btn_up = 0;
 	if(b_btn_up > btn_up) {
-		a_mode++;if(a_mode > 15) a_mode = 0;
+		a_mode++;if(a_mode > 8) a_mode = 0;
 		if(a_mode == 0) system("mpg123 /home/pi/Music/arm-action1.mp3 &");
 		if(a_mode == 1) system("mpg123 /home/pi/Music/01.mp3 &");
 		if(a_mode == 2) system("mpg123 /home/pi/Music/02.mp3 &");
@@ -258,8 +258,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(ps3dat->button[PAD_KEY_DOWN]) btn_down++;
 	if(!ps3dat->button[PAD_KEY_DOWN]) btn_down = 0;
 	if(b_btn_down > btn_down) {
-		a_mode--;if(a_mode < 0) a_mode = 14;
-//		if (a_mode == 9) a_mode = 8;
+		a_mode--;if(a_mode < 0) a_mode = 0;
 		if(a_mode == 0) system("mpg123 /home/pi/Music/arm-action1.mp3 &");
 		if(a_mode == 1) system("mpg123 /home/pi/Music/01.mp3 &");
 		if(a_mode == 2) system("mpg123 /home/pi/Music/02.mp3 &");
@@ -297,24 +296,25 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(b_mode == 1) servo06 = -128;
 	if(b_mode == 0) servo06 = -45;
 	
-	if(a_mode == 0) servo03 = 35;
-	if(a_mode == 1) servo03 = -155;
-	if(a_mode == 2) servo03 = -100;
-	if(a_mode == 3) servo03 = 35;
-	if(a_mode == 4) servo03 = -150;
-	if(a_mode == 5) servo03 = -90;
-	if(a_mode == 6) servo03 = -90;
-	if(a_mode == 7) servo03 = -70;
-	if(a_mode == 8) servo03 = 35;
-	if(a_mode == 9) a_mode = 10;
-	if(a_mode == 10) {};
+	if(a_mode == 0) servo03 = 35;// 35
+	if(a_mode == 1) servo03 = 15;//-155
+	if(a_mode == 2) servo03 = 0;//100
+	if(a_mode == 3) servo03 = -15;//35
+	if(a_mode == 4) servo03 = -30;//-150
+	if(a_mode == 5) servo03 = -60;//90
+	if(a_mode == 6) servo03 = -100;//90
+	if(a_mode == 7) servo03 = -150;//-70
+	if(a_mode == 8) servo03 = -160;//35
+//	if(a_mode == 9) a_mode = 10;//10
+//	if(a_mode == 10) {};
 	
 	servo04 = 33 - servo04b;
 
 	setPCA9685Duty(fds , 3 , servo03);
 	setPCA9685Duty(fds , 4 , servo04);
 	setPCA9685Duty(fds , 5 , servo05);
-//	setPCA9685Duty(fds , 5 , ps3dat->stick [PAD_RIGHT_X]);
+	
+//	setPCA9685Duty(fds , 5 , ps3dat->stick [PAD_RIGHT_X]); // servo center
 //	printf("XX %4d XX",ps3dat->stick [PAD_RIGHT_X]);
 
 	setPCA9685Duty(fds , 6 , servo06);
