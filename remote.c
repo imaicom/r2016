@@ -355,7 +355,6 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		softPwmWrite(29,100);
 		softPwmWrite(24,0);
 		softPwmWrite(25,60);
-		system("mpg123 /home/pi/Music/gundam_startup.mp3 &");
 		delay(800);
 		softPwmWrite(28,0);
 		softPwmWrite(29,0);
@@ -365,6 +364,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 		delay(300);
 		softPwmWrite(24,0);
 		softPwmWrite(25,0);
+		system("mpg123 /home/pi/Music/gundam_startup.mp3 &");
 		
 		mode = 2;
 	};
