@@ -381,7 +381,7 @@ void main() {
 					if(!digitalRead( 6)) {
 						write_file("cntWheel" , 0 );
 						write_file("bar" , 0 );
-						system("mpg123 /home/pi/Music/victory_for_you.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/victory_for_you.mp3 &");delay(3000);
 //						system("mpg123 /home/pi/Music/10.mp3 &");delay(1000);
 //						system("mpg123 /home/pi/Music/09.mp3 &");delay(1000);
 //						system("mpg123 /home/pi/Music/08.mp3 &");delay(1000);
