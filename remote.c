@@ -321,7 +321,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 
 	
 	if(mode == 100) {
-		setPCA9685Duty(fds , 1 , -20);//-90
+		setPCA9685Duty(fds , 0 , -50);//-90
 		//setPCA9685Duty(fds , 0 , -90);
 		
 		mode = 101;
@@ -330,14 +330,14 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	};
 	if(mode == 102) {
 		//setPCA9685Duty(fds , 1 , -90);//-90
-		setPCA9685Duty(fds , 0 , -90);
+		setPCA9685Duty(fds , 1 , -90);
 		
 		mode = 103;
 	};
 	if(mode == 103) {
 	};
 	if(mode == 104) {
-		setPCA9685Duty(fds , 0 , -90);
+		setPCA9685Duty(fds , 1 , -90);
 		//setPCA9685Duty(fds , 1 , -90);//-90
 		//setPCA9685Duty(fds , 0 , -90);
 		
