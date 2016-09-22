@@ -303,7 +303,7 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(a_mode == 4) servo03 = -30;//-150
 	if(a_mode == 5) servo03 = -60;//90
 	if(a_mode == 6) servo03 = -100;//90
-	if(a_mode == 7) servo03 = -150;//-70
+	if(a_mode == 7) servo03 = -140;//-150
 	if(a_mode == 8) servo03 = -160;//35
 //	if(a_mode == 9) a_mode = 10;//10
 //	if(a_mode == 10) {};
