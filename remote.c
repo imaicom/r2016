@@ -296,15 +296,15 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	if(b_mode == 1) servo06 = -128;
 	if(b_mode == 0) servo06 = -45;
 	
-	if(a_mode == 0) servo03 = 35;// 35
-	if(a_mode == 1) servo03 = 15;//-155
-	if(a_mode == 2) servo03 = 0;//100
-	if(a_mode == 3) servo03 = -15;//35
-	if(a_mode == 4) servo03 = -30;//-150
-	if(a_mode == 5) servo03 = -60;//90
-	if(a_mode == 6) servo03 = -100;//90
-	if(a_mode == 7) servo03 = -140;//-150
-	if(a_mode == 8) servo03 = -160;//35
+	if(a_mode == 0) servo03 = 35;
+	if(a_mode == 1) servo03 = 15;
+	if(a_mode == 2) servo03 = 0;
+	if(a_mode == 3) servo03 = -15;
+	if(a_mode == 4) servo03 = -30;
+	if(a_mode == 5) servo03 = -60;
+	if(a_mode == 6) servo03 = -100;
+	if(a_mode == 7) servo03 = -140;
+	if(a_mode == 8) servo03 = -160;
 //	if(a_mode == 9) a_mode = 10;//10
 //	if(a_mode == 10) {};
 	
