@@ -399,8 +399,8 @@ void main() {
 				};
 				
 				if(bmeter == 1) {
-					softPwmWrite(16,100);softPwmWrite( 1, 0);
-					softPwmWrite(28,100);softPwmWrite(29, 0);
+					softPwmWrite(16,80);softPwmWrite( 1, 0);
+					softPwmWrite(28,80);softPwmWrite(29, 0);
 					if(check_file("bar") > 24) {
 						printf("%d\n",check_file("bar"));
 						bmeter = 2;
@@ -415,7 +415,7 @@ void main() {
 					printf(" %4d , %4d , %4d , %4d \n",digitalRead(21),digitalRead(22),digitalRead(23),digitalRead(24));
 //					if(1) {
 //						softPwmWrite(16,8);softPwmWrite( 1, 0);//while(!digitalRead(21));
-//					} else {
+//					} else {softPwmWrite
 //						softPwmWrite(28,8);softPwmWrite(29, 0);//while(!digitalRead(24));
 //					};
 //					sleep(1);
@@ -462,14 +462,15 @@ void main() {
 				};
 				
 				if(bmeter == 3) {
-					softPwmWrite(16,100);softPwmWrite( 1, 0);
-					softPwmWrite(28,100);softPwmWrite(29, 0);
+					softPwmWrite(16,80);softPwmWrite( 1, 0);
+					softPwmWrite(28,80);softPwmWrite(29, 0);
 					
 					bmeter = 4;
 				};
 				
 				if(bmeter == 4) {
-					if(check_file("cntWheel") > 20) {
+					delay(2000);//7.6-2000
+//					if(check_file("cntWheel") > 20) {
 						printf("%d\n",check_file("cntWheel"));
 						softPwmWrite(16, 0);softPwmWrite( 1, 0);
 						softPwmWrite(28, 0);softPwmWrite(29, 0);
@@ -486,12 +487,12 @@ void main() {
 						write_file("bar" , 0 );
 						
 						bmeter = 5;
-					};
+//					};
 				};
 				
 				if(bmeter == 5) {
-					softPwmWrite(16,80);softPwmWrite( 1, 0);
-					softPwmWrite(28,80);softPwmWrite(29, 0);
+					softPwmWrite(16,70);softPwmWrite( 1, 0);
+					softPwmWrite(28,70);softPwmWrite(29, 0);
 
 					if(check_file("bar") > 34) { //36
 						printf("%d\n",check_file("bar"));
@@ -509,11 +510,12 @@ void main() {
 				if(bmeter == 6) {
 					softPwmWrite(16,80);softPwmWrite( 1, 0);
 					softPwmWrite(28,80);softPwmWrite(29, 0);
-				
-					if(check_file("cntWheel") > 5) { // 4
+
+					delay(600);
+//					if(check_file("cntWheel") > 5) { // 4
 						printf("%d\n",check_file("cntWheel"));
 						bmeter = 7;
-					};	
+//					};	
 				};
 				
 				if(bmeter == 7) {
