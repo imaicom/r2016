@@ -34,8 +34,8 @@ int btn_up = 0;
 int b_btn_up = 0;
 int btn_down = 0;
 int b_btn_down = 0;
-int btn_select = 0;
-int b_btn_select = 0;
+int btn_cross = 0;
+int b_btn_cross = 0;
 
 int btn_r1 = 0;
 int b_btn_r1 = 0;
@@ -273,10 +273,10 @@ int ps3c_test(struct ps3ctls *ps3dat) {
 	};
 	b_btn_down = btn_down;
 	
-	if(ps3dat->button[PAD_KEY_SELECT]) btn_select++;
-	if(!ps3dat->button[PAD_KEY_SELECT]) btn_select = 0;
-	if(b_btn_select > btn_select) {b_mode++;if(b_mode > 1) b_mode = 0;};
-	b_btn_select = btn_select;
+	if(ps3dat->button[PAD_KEY_CROSS]) btn_cross++;
+	if(!ps3dat->button[PAD_KEY_CROSS]) btn_cross = 0;
+	if(b_btn_cross > btn_cross) {b_mode++;if(b_mode > 1) b_mode = 0;};
+	b_btn_cross = btn_cross;
 	
 //	if(ps3dat->button[PAD_KEY_R1]) btn_r1++;
 //	if(!ps3dat->button[PAD_KEY_R1]) btn_r1 = 0;
