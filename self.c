@@ -382,13 +382,13 @@ void main() {
 						write_file("cntWheel" , 0 );
 						write_file("bar" , 0 );
 						system("mpg123 /home/pi/Music/victory_for_you.mp3 &");delay(3000);
-//						system("mpg123 /home/pi/Music/10.mp3 &");delay(1000);
-//						system("mpg123 /home/pi/Music/09.mp3 &");delay(1000);
-//						system("mpg123 /home/pi/Music/08.mp3 &");delay(1000);
-//						system("mpg123 /home/pi/Music/07.mp3 &");delay(1000);
-//						system("mpg123 /home/pi/Music/06.mp3 &");delay(1000);
-//						system("mpg123 /home/pi/Music/05.mp3 &");delay(1000);
-//						system("mpg123 /home/pi/Music/04.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/10.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/09.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/08.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/07.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/06.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/05.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/04.mp3 &");delay(1000);
 						system("mpg123 /home/pi/Music/03.mp3 &");delay(1000);
 						system("mpg123 /home/pi/Music/02.mp3 &");delay(1000);
 						system("mpg123 /home/pi/Music/01.mp3 &");delay(1000);
@@ -476,6 +476,7 @@ void main() {
 						sleep(1);
 				
 						digitalWrite(7,1);
+						system("mpg123 /home/pi/Music/fire2.mp3");
 						system("mpg123 /home/pi/Music/beamRifle.mp3 &");
 						sleep(1);
 						digitalWrite(7,0);
@@ -489,8 +490,8 @@ void main() {
 				};
 				
 				if(bmeter == 5) {
-					softPwmWrite(16,100);softPwmWrite( 1, 0);
-					softPwmWrite(28,100);softPwmWrite(29, 0);
+					softPwmWrite(16,80);softPwmWrite( 1, 0);
+					softPwmWrite(28,80);softPwmWrite(29, 0);
 
 					if(check_file("bar") > 34) { //36
 						printf("%d\n",check_file("bar"));
@@ -506,8 +507,8 @@ void main() {
 				};
 				
 				if(bmeter == 6) {
-					softPwmWrite(16,100);softPwmWrite( 1, 0);
-					softPwmWrite(28,100);softPwmWrite(29, 0);
+					softPwmWrite(16,80);softPwmWrite( 1, 0);
+					softPwmWrite(28,80);softPwmWrite(29, 0);
 				
 					if(check_file("cntWheel") > 5) { // 4
 						printf("%d\n",check_file("cntWheel"));
@@ -542,6 +543,17 @@ void main() {
 						write_file("cntWheel" , 0 );
 						write_file("bar" , 0 );
 						system("mpg123 /home/pi/Music/otsukare.mp3");delay(900);
+						system("mpg123 /home/pi/Music/10.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/09.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/08.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/07.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/06.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/05.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/04.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/03.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/02.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/01.mp3 &");delay(1000);
+						system("mpg123 /home/pi/Music/amuro.mp3 &");
 						bmeter = 1;
 					};
 				};
